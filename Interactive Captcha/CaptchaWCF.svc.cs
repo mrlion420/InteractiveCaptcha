@@ -37,5 +37,14 @@ namespace Interactive_Captcha
         {
 
         }
+
+        #region Utility Methods
+   
+        public string GetRandomImageFromFolder()
+        {
+            return string.Empty;
+        }
+
+        #endregion
     }
 }
