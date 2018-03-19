@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.Text;
 
@@ -10,7 +11,8 @@ namespace Interactive_Captcha
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
-    public class Service1 : IService1
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    public class CaptchaWCF : ICaptchaWCF
     {
         public string GetData(int value)
         {
@@ -28,6 +30,12 @@ namespace Interactive_Captcha
                 composite.StringValue += "Suffix";
             }
             return composite;
+        }
+
+        // Change return type from void to smth else after researching
+        public void GetCaptchaImages()
+        {
+
         }
     }
 }
