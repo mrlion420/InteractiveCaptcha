@@ -38,6 +38,11 @@ namespace Interactive_Captcha
 
         }
 
+        public bool CheckResult(long sessionId)
+        {
+            return true;
+        }
+
         #region Utility Methods
    
         public string GetRandomImageFromFolder()
