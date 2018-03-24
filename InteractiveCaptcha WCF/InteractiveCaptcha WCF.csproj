@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CaptchaWCF.svc" />
+    <Content Include="SourceImg\1.jpg" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="OutputImg\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Web.Debug.config">
