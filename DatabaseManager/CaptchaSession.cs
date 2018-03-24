@@ -15,7 +15,11 @@ namespace DatabaseManager
         public CaptchaSession GetCaptchaSession_ById(long captchaSessionId)
         {
             //SAMPLE CODE
-            return new CaptchaSession();
+            CaptchaSession obj = new CaptchaSession();
+            obj.Id = 1;
+            obj.imageName = string.Empty;
+            obj.isValid = true;
+            return obj;
         }
 
         public bool Update(CaptchaSession obj)
