@@ -1,12 +1,20 @@
-﻿function getCaptchaImages(){
-    // Get image
-    let data = [];
-    let htmlString ="";
-    for(let i = 0; i < 9; i++){
-        htmlString += "<div id='tile" + i + "'>";
-        htmlString += "<img src='" + data[i] +"' class='bigger'/>";
-        htmlString += "</div>";
-    }
+﻿var angle = 0;
 
-    $("#container").html(htmlString);
+$(document).ready(function () {
+    imageClick();
+});
+
+function imageClick() {
+
+    //var angle = 0,
+    //    img = document.getElementById('container');
+    //document.getElementById('image').onclick = function () {
+    //    angle = (angle + 90) % 360;
+    //    img.className = "rotate" + angle;
+    //}
+    $("#image").click(function () {
+        angle += 90;
+        $("#image").css("transform", "rotate(" + angle + "deg)");
+    })
 }
+
