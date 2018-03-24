@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -35,7 +36,9 @@ namespace Interactive_Captcha
         // Change return type from void to smth else after researching
         public void GetCaptchaImages()
         {
-
+            string currentDirectory = System.Environment.CurrentDirectory;
+            Image img = Image.FromFile( currentDirectory + @"/img/1.png");
+            
         }
 
         public bool CheckResult(long sessionId)
