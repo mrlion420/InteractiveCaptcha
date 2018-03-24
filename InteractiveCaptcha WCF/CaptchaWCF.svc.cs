@@ -36,8 +36,37 @@ namespace Interactive_Captcha
         // Change return type from void to smth else after researching
         public void GetCaptchaImages()
         {
-            string currentDirectory = System.Environment.CurrentDirectory;
-            Image img = Image.FromFile( currentDirectory + @"/img/1.png");
+            string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+            Image img = Image.FromFile( currentDirectory + @"\SourceImg\1.jpg");
+            Bitmap bmpImg = new Bitmap(img);
+            int width = bmpImg.Width;
+            int height = bmpImg.Height;
+            int widthCropSize = width / 3;
+            int heightCropSize = height / 3;
+
+            int currentX = 0;
+            int currentY = 0;
+
+            for(int i = 0 ; i < 3 ; i++)
+            {                
+                if(i != 0)
+                {
+                    currentX += widthCropSize;
+                }
+                // Reset Y coordinates when X is changed
+                currentY = 0;
+                for(int j = 0; j < 3; j++)
+                {
+                    if(j != 0)
+                    {
+                        currentY += heightCropSize;
+                    }
+                    Rectangle cropArea = new Rectangle(currentX, currentY, widthCropSize, heightCropSize);
+                    cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
+                    Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, System.Drawing.Imaging.PixelFormat.DontCare);
+                    bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + i + "-" + j + ".png");
+                }
+            }            
             
         }
 
