@@ -12,7 +12,7 @@ namespace DatabaseManager
         private long captchaSessionId;
         private string attributeName;
         private string attributeValue;
-
+        //test
         public string AttributeValue
         {
             get { return attributeValue; }
