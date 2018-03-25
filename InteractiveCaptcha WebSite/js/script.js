@@ -12,9 +12,18 @@ function imageClick() {
     //    angle = (angle + 90) % 360;
     //    img.className = "rotate" + angle;
     //}
-    $("#image").click(function () {
+    $("#image1").click(function () {
         angle += 90;
-        $("#image").css("transform", "rotate(" + angle + "deg)");
+        $("#image1").css("transform", "rotate(" + angle + "deg)");
+    })
+
+    $("#image2").click(function () {
+        angle += 90;
+        $("#image2").css("transform", "rotate(" + angle + "deg)");
+    })
+
+    $("#image3").click(function () {
+        angle += 90;
+        $("#image3").css("transform", "rotate(" + angle + "deg)");
     })
 }
-

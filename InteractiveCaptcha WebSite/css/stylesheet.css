@@ -1,33 +1,43 @@
-
-﻿
-.bigger{
-    transition: width 3s, height 3s;
-    -webkit-transition: width 3s, height 3s;
+.anime {
+    margin: 50px;
 }
-.bigger:hover{
+
+.container {
+    display: inline-block;
+    height: 400px;
+    width: 400px;
+}
+
+.tile {
+    transition: width 2s, height 2s, all 300ms;
+    -webkit-transition: width 2s, height 2s;
+    height: 400px;
+    width: 400px;
+}
+
+.tile:hover {
     cursor: pointer;
-   width: 350px;
-   height: 350px;
+    transform: scale(1.1);
 }
 
 #container.rotate90 #image {
-    transform: rotate(90deg) translateY(-100%);
+    transform: rotate(90deg) translateY(-100%) scale(1.1);
     -webkit-transform: rotate(90deg) translateY(-100%);
     -ms-transform: rotate(90deg) translateY(-100%);
 }
-#container.rotate90 #image:hover{
-    transform: rotate(90deg) translateY(-100%) scale(1.5);
-} 
+
+#container.rotate90 #image:hover {
+    transform: rotate(90deg) translateY(-100%) scale(1.1);
+}
 
 #container.rotate180 #image {
-    transform: rotate(180deg) translate(-100%, -100%);
+    transform: rotate(180deg) translate(-100%, -100%) scale(1.1);
     -webkit-transform: rotate(180deg) translate(-100%, -100%);
     -ms-transform: rotate(180deg) translateX(-100%, -100%);
 }
 
 #container.rotate270 #image {
-    transform: rotate(270deg) translateX(-100%);
+    transform: rotate(270deg) translateX(-100%) scale(1.1);
     -webkit-transform: rotate(270deg) translateX(-100%);
     -ms-transform: rotate(270deg) translateX(-100%);
 }
-
