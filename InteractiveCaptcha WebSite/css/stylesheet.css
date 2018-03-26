@@ -1,5 +1,6 @@
 ﻿
-﻿
+/*
+	//fixed the hovering using HTML onMouse and offMouse. the below may not be needed
 .bigger{
     transition: width 3s, height 3s;
     -webkit-transition: width 3s, height 3s;
@@ -10,6 +11,7 @@
    height: 55px;
 }
 
+	
 #container.rotate90 #image {
     transform: rotate(90deg) translateY(-100%);
     -webkit-transform: rotate(90deg) translateY(-100%);
@@ -31,3 +33,4 @@
     -ms-transform: rotate(270deg) translateX(-100%);
 }
 
+*/

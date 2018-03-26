@@ -1,10 +1,10 @@
 ﻿var angle = 0;
 
 $(document).ready(function () {
-    imageClick();
+    prepareImgForClick();
 });
 
-function imageClick() {
+function imageClick(img) {
 
     //var angle = 0,
     //    img = document.getElementById('container');
@@ -12,9 +12,14 @@ function imageClick() {
     //    angle = (angle + 90) % 360;
     //    img.className = "rotate" + angle;
     //}
-    $("#image").click(function () {
+    $("#"+img).click(function () {
         angle += 90;
-        $("#image").css("transform", "rotate(" + angle + "deg)");
+        if (angle > 270)
+        {
+             //ensures that degree stays as 0, 90,180 and 270.
+            angle = 0;
+        }
+        $("#"+img).css("transform", "rotate(" + angle + "deg)");
 
     })
 }
@@ -32,8 +37,7 @@ function makeBlocks() {
             box.style.borderColor = "black";
             box.style.borderWidth = "1px";
             box.style.borderStyle = "solid";
-
-
+           
             box.style.width = "100px";
             box.style.height = "100px";
             box.style.margin = "0";
@@ -41,6 +45,15 @@ function makeBlocks() {
             box.style.cursor = "pointer";
             box.style.display = "inline-block";
             box.style.float = "left";
+
+            //create image element dynamically with minor animations
+            var img = document.createElement('img');
+            img.src = '/images/smiley.png';
+            img.id = 'box' + i + j;
+            img.onmouseover = function () { this.style.width = "60px"; };
+            img.onmouseout = function () { this.style.width = "50px"; };
+            box.appendChild(img);
+            //end of image element creation
         }
         document.getElementById('iCap').appendChild(row);
         row.style.display = "block";
@@ -50,12 +63,26 @@ function makeBlocks() {
     }
 }
 
+
+function prepareImgForClick()
+{
+    imageClick("image");
+    imageClick("box00");
+    imageClick("box01");
+    imageClick("box02");
+    imageClick("box10");
+    imageClick("box11");
+    imageClick("box12");
+    imageClick("box20");
+    imageClick("box21");
+    imageClick("box22");
+}
+
+
 //Contains functions when page loads
 window.onload = function () {
     
     makeBlocks();
-   
 
-    
 };
 
