@@ -1,4 +1,4 @@
-.anime {
+﻿.anime {
     margin: 50px;
 }
 
@@ -7,17 +7,10 @@
     height: 400px;
     width: 400px;
 }
-
-.tile {
-    transition: width 2s, height 2s, all 300ms;
-    -webkit-transition: width 2s, height 2s;
-    height: 400px;
-    width: 400px;
-}
-
-.tile:hover {
+.bigger:hover{
     cursor: pointer;
-    transform: scale(1.1);
+   width: 350px;
+   height: 350px;
 }
 
 #container.rotate90 #image {
