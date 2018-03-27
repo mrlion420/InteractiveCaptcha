@@ -20,7 +20,7 @@
 }
 
 .bigger {
-    transition: width .3s, height .3s, margin .3s;
+    transition: width .3s, height .3s, margin .3s, transform 0.5s;
     /*-webkit-transition: width .3s, height .3s;*/
     width: 100px;
     height: 100px;
