@@ -1,17 +1,10 @@
 ﻿var angle = 0;
 
 $(document).ready(function () {
-    imageClick();
+    tileClick();
 });
 
-function imageClick() {
-
-    //var angle = 0,
-    //    img = document.getElementById('container');
-    //document.getElementById('image').onclick = function () {
-    //    angle = (angle + 90) % 360;
-    //    img.className = "rotate" + angle;
-    //}
+function tileClick() {
     $("#image1").click(function () {
         angle += 90;
         $("#image1").css("transform", "rotate(" + angle + "deg)");
@@ -25,5 +18,35 @@ function imageClick() {
     $("#image3").click(function () {
         angle += 90;
         $("#image3").css("transform", "rotate(" + angle + "deg)");
+    })
+
+    $("#image4").click(function () {
+        angle += 90;
+        $("#image4").css("transform", "rotate(" + angle + "deg)");
+    })
+
+    $("#image5").click(function () {
+        angle += 90;
+        $("#image5").css("transform", "rotate(" + angle + "deg)");
+    })
+
+    $("#image6").click(function () {
+        angle += 90;
+        $("#image6").css("transform", "rotate(" + angle + "deg)");
+    })
+
+    $("#image7").click(function () {
+        angle += 90;
+        $("#image7").css("transform", "rotate(" + angle + "deg)");
+    })
+
+    $("#image8").click(function () {
+        angle += 90;
+        $("#image8").css("transform", "rotate(" + angle + "deg)");
+    })
+
+    $("#image9").click(function () {
+        angle += 90;
+        $("#image9").css("transform", "rotate(" + angle + "deg)");
     })
 }
