@@ -12,6 +12,8 @@ namespace DatabaseManager
         private long captchaSessionId;
         private string attributeName;
         private string attributeValue;
+        private string test;
+
         //test
         public string AttributeValue
         {
