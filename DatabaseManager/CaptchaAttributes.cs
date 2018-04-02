@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,77 @@ namespace DatabaseManager
 {
     public class CaptchaAttributes
     {
-        private long Id;
-        private long captchaSessionId;
+        private long captchaId;
+        private long attributeId;
         private string attributeName;
         private string attributeValue;
-        private string test;
+        DatabaseManager database = new DatabaseManager();
+        CaptchaAttributes obj = new CaptchaAttributes();
+
+        public CaptchaAttributes()
+        {
+
+        }
+
+        public CaptchaAttributes(long captchaId,long attributeId,string attributeName,string attributeValue)
+        {
+            captchaId = this.captchaId;
+            attributeId = this.attributeId;
+            attributeName = this.attributeName;
+            attributeValue = this.attributeValue;
+        }
+
+        public bool Insert(CaptchaAttributes obj)
+        {
+            string ID = obj.ID.ToString();
+            string captchaSessionid = obj.ID.ToString();
+            string attributeName = obj.attributeName;
+            string attributeValue = obj.AttributeValue;
+            string query = "INSERT INTO captcha_attributes(captchaID,attributeID,attributeName,value) VALUES('"+ID+"','"+captchaSessionid+"','"+attributeName+"','"+attributeName+"')";
+            if (database.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, database.Connection);
+                cmd.ExecuteNonQuery();
+                database.CloseConnection();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public CaptchaAttributes GetCaptchaAttribute_ById(long captchaId,long attributeId)
+        {
+
+            string query = "SELECT * FROM captcha_attributes WHERE captchaID='"+captchaId+"' AND attributeID='"+attributeId+"'";
+            if (database.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query,database.Connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+                while(dataReader.Read())
+                {
+                    string captchaid = dataReader["captchaID"].ToString();
+                    long ID = Convert.ToInt64(captchaid);
+                    obj.captchaId = ID;
+
+                    string attributeid = dataReader["attributeID"].ToString();
+                    long AID = Convert.ToInt64(attributeid);
+                    obj.attributeId = ID;
+
+                    string attributeName = dataReader["attributeName"].ToString();
+                    obj.attributeName = attributeName;
+
+                    string value = dataReader["value"].ToString();
+                    obj.AttributeValue = value;
+                }
+            }
+            return obj;
+        }
+
+
+
+
 
         //test
         public string AttributeValue
@@ -28,17 +95,17 @@ namespace DatabaseManager
         }
 
 
-        public long CaptchaSessionID
+        public long attributeID
         {
-            get { return captchaSessionId; }
-            set { captchaSessionId = value; }
+            get { return attributeId; }
+            set { attributeId = value; }
         }
 
 
-        public long ID
+        public long captchaID
         {
-            get { return Id; }
-            set { Id = value; }
+            get { return captchaID; }
+            set { captchaId = value; }
         }
 
     }
