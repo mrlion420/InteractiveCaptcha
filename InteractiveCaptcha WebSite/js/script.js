@@ -29,9 +29,12 @@ function click(){
         $(this).css("transform", "rotate(" + currentAngle + "deg)");
     });
 
-    $("confirm").click(function () {
-
+    $("#confirm").click(function () {
+        $(".text-block").fadeIn(1000);
+        $(".tile").css("opacity", 0.3);
     });
+
+
 }
 
     
