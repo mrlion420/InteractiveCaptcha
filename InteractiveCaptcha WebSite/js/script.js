@@ -28,8 +28,13 @@ function click(){
         $(this).data("degree", currentAngle);
         $(this).css("transform", "rotate(" + currentAngle + "deg)");
     });
+
+    $("confirm").click(function () {
+
+    });
 }
 
+    
 //function getCaptchaImages() {
 //    $.ajax({
 //        type: "GET",
