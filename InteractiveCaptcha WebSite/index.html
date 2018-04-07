@@ -9,8 +9,10 @@
 </head>
 <body>
     <div class="container">
-        <div class="text-block">
-                <p class="text">Successful!</p>
+        <div class="text-block" id="success">
+            <p class="text">Successful!</p>
+        </div> <div class="text-block" id="error">
+            <p class="text" style="color: red !important;">Please try again!</p>
         </div>
         <div class="tile">
             <div class="table">
@@ -47,12 +49,16 @@
                 </div>
             </div>
         </div>
-        <button class="button" id="confirm" type="button">
-            Confirm
-        </button>
-        <button class="button" id="reload" type="button">
-            Reload
-        </button>
+
     </div>
+    <button class="button" id="confirm" type="button">
+        Confirm
+    </button> <button class="button" id="confirmError" type="button">
+        ERROR
+    </button>
+
+    <button class="button" id="reload" type="button">
+        Reload
+    </button>
 </body>
 </html>

@@ -30,8 +30,17 @@ function click(){
     });
 
     $("#confirm").click(function () {
-        $(".text-block").fadeIn(1000);
+        $("#success").fadeIn(1000);
         $(".tile").css("opacity", 0.3);
+    });
+
+    $("#confirmError").click(function () {
+        $("#error").fadeIn(1000);
+        $(".tile").css("opacity", 0.3);
+    })
+
+    $("#reload").click(function () {
+        window.location.reload();
     });
 
 
