@@ -31,8 +31,8 @@ namespace DatabaseManager
 
         public bool Insert(CaptchaAttributes obj)
         {
-            string ID = obj.ID.ToString();
-            string captchaSessionid = obj.ID.ToString();
+            string ID = obj.captchaId.ToString();
+            string captchaSessionid = obj.captchaId.ToString();
             string attributeName = obj.attributeName;
             string attributeValue = obj.AttributeValue;
             string query = "INSERT INTO captcha_attributes(captchaID,attributeID,attributeName,value) VALUES('"+ID+"','"+captchaSessionid+"','"+attributeName+"','"+attributeName+"')";

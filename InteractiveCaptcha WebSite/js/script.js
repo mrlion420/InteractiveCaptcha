@@ -30,34 +30,43 @@ function click(){
     });
 
     $("#confirm").click(function () {
-        $(".text-block").fadeIn(1000);
+        $("#success").fadeIn(1000);
         $(".tile").css("opacity", 0.3);
+    });
+
+    $("#confirmError").click(function () {
+        $("#error").fadeIn(1000);
+        $(".tile").css("opacity", 0.3);
+    })
+
+    $("#reload").click(function () {
+        window.location.reload();
     });
 
 
 }
 
     
-//function getCaptchaImages() {
-//    $.ajax({
-//        type: "GET",
-//        url: "webservice URL",
-//        data: "imagename and degress",
-//        dataType: "json",
-//        timeout: 5,
-//        success: function (response) {
-//            if (response === "false" || response === undefined || response === null) {
-//                // ERROR 
+function getCaptchaImages() {
+    $.ajax({
+        type: "GET",
+        url: "webservice URL",
+        data: "imagename and degress",
+        dataType: "json",
+        timeout: 5,
+        success: function (response) {
+            if (response === "false" || response === undefined || response === null) {
+                // ERROR 
 
-//            } else {
-//                // NO ERROR
-//                let urlOne = response[0]; // Image url
-//                let urlTwo = response[1]; // image url
-//            }
+            } else {
+                // NO ERROR
+                let urlOne = response[0]; // Image url
+                let urlTwo = response[1]; // image url
+            }
             
-//        },
-//        error: function () {
-//            // ERROR
-//        }
-//    });
-//}
+        },
+        error: function () {
+            // ERROR
+        }
+    });
+}
