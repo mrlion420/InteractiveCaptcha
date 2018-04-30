@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
@@ -33,11 +34,11 @@ namespace Interactive_Captcha
             return composite;
         }
 
-        // Change return type from void to smth else after researching
-        public void GetCaptchaImages()
+        public List<ImageURL> GetCaptcha()
         {
+            List<ImageURL> lstImageURL = new List<ImageURL>();
             string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
-            Image img = Image.FromFile( currentDirectory + @"\SourceImg\1.jpg");
+            Image img = Image.FromFile(currentDirectory + @"\SourceImg\1.jpg");
             Bitmap bmpImg = new Bitmap(img);
             int width = bmpImg.Width;
             int height = bmpImg.Height;
@@ -47,27 +48,39 @@ namespace Interactive_Captcha
             int currentX = 0;
             int currentY = 0;
 
-            for(int i = 0 ; i < 3 ; i++)
-            {                
-                if(i != 0)
+            for (int i = 0; i < 3; i++)
+            {
+                if (i != 0)
                 {
-                    currentX += widthCropSize;
+                    currentY += heightCropSize;
                 }
-                // Reset Y coordinates when X is changed
-                currentY = 0;
-                for(int j = 0; j < 3; j++)
+                // Reset X coordinates when Y is changed
+                currentX = 0;
+                for (int j = 0; j < 3; j++)
                 {
-                    if(j != 0)
+                    if (j != 0)
                     {
-                        currentY += heightCropSize;
+                        currentX += widthCropSize;
                     }
                     Rectangle cropArea = new Rectangle(currentX, currentY, widthCropSize, heightCropSize);
-                    cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
+                    //cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
                     Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, System.Drawing.Imaging.PixelFormat.DontCare);
                     bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + i + "-" + j + ".png");
                 }
-            }            
-            
+            }
+            return lstImageURL;
+        }
+
+        public int GetRandomImageName()
+        {
+            int result = 0;
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                byte[] randomByte = new byte[5];
+                rng.GetBytes(randomByte);
+                result = BitConverter.ToInt32(randomByte, 0);
+            }
+            return result;
         }
 
         public bool CheckResult(long sessionId)
