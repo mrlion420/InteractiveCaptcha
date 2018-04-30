@@ -23,10 +23,6 @@ namespace Interactive_Captcha
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]
-        void GetCaptchaImages();
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]
         bool CheckResult(long sessionId);
 
         [OperationContract]

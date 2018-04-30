@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CaptchaAttributes.cs" />
+    <Compile Include="CaptchaKeys.cs" />
     <Compile Include="CaptchaSession.cs" />
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

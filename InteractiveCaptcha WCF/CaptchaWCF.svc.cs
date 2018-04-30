@@ -73,13 +73,15 @@ namespace Interactive_Captcha
 
         public int GetRandomImageName()
         {
-            int result = 0;
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-            {
-                byte[] randomByte = new byte[5];
-                rng.GetBytes(randomByte);
-                result = BitConverter.ToInt32(randomByte, 0);
-            }
+            //using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            //{
+            //    byte[] randomByte = new byte[5];
+            //    rng.GetBytes(randomByte);
+            //    result = BitConverter.ToInt32(randomByte, 0);
+            //}
+            Random rnd = new Random();
+            int result = rnd.Next(1, 13); // creates a number between 1 and 12
+
             return result;
         }
 
