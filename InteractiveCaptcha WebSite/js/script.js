@@ -24,20 +24,37 @@ function GetCaptchaImages() {
 
 function GetCaptcha_Success(data){
     let htmlString = "";
-    for(let i = 1; i <= data.length; i++){
-        if(i === 1){
-            htmlString += "<div class='table'>";
-        } else if ( i % 3 === 0){
-            htmlString += "</div>";
+    let count = 0;
+    let currentCount = 1;
+    $.each(data, function(key, value){
+        if(count === 0){
             htmlString += "<div class='table'>";
         }
         htmlString += "<div class='cell'>";
-        htmlString += "<img class='bigger imageclick' id='image-" + i + "' src='" + data[i- 1].URL + "' data-degree='0'/>";
+        htmlString += "<img class='bigger imageclick' id='image-" + currentCount + "' src='" + value.URL + "' data-degree='0'/>";
         htmlString += "</div>";
-        if(i % 3 === 0){
+        count++;
+        if(count % 3 === 0){
             htmlString += "</div>";
+            count = 0;
         }
-    }
+        currentCount++;
+    });
+
+    // for(let i = 1; i <= data.length; i++){
+    //     if(i === 1){
+    //         htmlString += "<div class='table'>";
+    //     } else if ( i % 3 === 0){
+    //         htmlString += "</div>";
+    //         htmlString += "<div class='table'>";
+    //     }
+    //     htmlString += "<div class='cell'>";
+    //     htmlString += "<img class='bigger imageclick' id='image-" + i + "' src='" + data[i- 1].URL + "' data-degree='0'/>";
+    //     htmlString += "</div>";
+    //     if(i % 3 === 0){
+    //         htmlString += "</div>";
+    //     }
+    // }
     $("#tile").html(htmlString);
 }
 
@@ -63,7 +80,7 @@ function GetCaptcha_Error(){
 //}
 
 function click(){
-    $(".imageclick").click(function () {
+    $(".class").on("click", function(){
         let currentAngle = $(this).data("degree");
         currentAngle += 90;
         $(this).data("degree", currentAngle);
