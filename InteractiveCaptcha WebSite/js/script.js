@@ -80,7 +80,7 @@ function GetCaptcha_Error(){
 //}
 
 function click(){
-    $(".class").on("click", function(){
+    $(".tile").on("click", "img", function(){
         let currentAngle = $(this).data("degree");
         currentAngle += 90;
         $(this).data("degree", currentAngle);
