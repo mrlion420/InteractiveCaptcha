@@ -1,11 +1,48 @@
-﻿var angle = 0;
+﻿var webServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
 
 $(document).ready(function () {
+    GetCaptchaImages();
     click();
 });
 
-function GetCaptchaImages() {
+function ajaxGet(methodName, data, successCallBack, errorCallBack){
+	let url = webServiceHost + "/" + methodName + "?callback=?";
+	return $.ajax({
+		type: 'GET',
+		url: url,
+		data: data,
+		dataType: 'jsonp',
+        success: successCallBack,
+        error : errorCallBack
+	});
+}
 
+function GetCaptchaImages() {
+    let methodName = "GetCaptcha";
+    ajaxGet(methodName, null, GetCaptcha_Success, GetCaptcha_Error);
+}
+
+function GetCaptcha_Success(data){
+    let htmlString = "";
+    for(let i = 1; i <= data.length; i++){
+        if(i === 1){
+            htmlString += "<div class='table'>";
+        } else if ( i % 3 === 0){
+            htmlString += "</div>";
+            htmlString += "<div class='table'>";
+        }
+        htmlString += "<div class='cell'>";
+        htmlString += "<img class='bigger imageclick' id='image-" + i + "' src='" + data[i- 1].URL + "' data-degree='0'/>";
+        htmlString += "</div>";
+        if(i % 3 === 0){
+            htmlString += "</div>";
+        }
+    }
+    $("#tile").html(htmlString);
+}
+
+function GetCaptcha_Error(){
+    // ERROR IN GETTING CAPTCHA
 }
 
 //function getRotationDegrees(imageObj) {
