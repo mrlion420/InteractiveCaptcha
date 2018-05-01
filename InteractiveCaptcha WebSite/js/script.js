@@ -4,6 +4,10 @@ $(document).ready(function () {
     click();
 });
 
+function GetCaptchaImages() {
+
+}
+
 //function getRotationDegrees(imageObj) {
  
 //    var matrix = imageObj.css("-webkit-transform") ||

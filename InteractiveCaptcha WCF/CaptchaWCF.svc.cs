@@ -36,8 +36,10 @@ namespace Interactive_Captcha
 
         public List<ImageURL> GetCaptcha()
         {
+            
             List<ImageURL> lstImageURL = new List<ImageURL>();
             string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+            string imageFilePath = currentDirectory + @"\OutputImg\";
             Image img = Image.FromFile(currentDirectory + @"\SourceImg\1.jpg");
             Bitmap bmpImg = new Bitmap(img);
             int width = bmpImg.Width;
@@ -65,7 +67,12 @@ namespace Interactive_Captcha
                     Rectangle cropArea = new Rectangle(currentX, currentY, widthCropSize, heightCropSize);
                     //cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
                     Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, System.Drawing.Imaging.PixelFormat.DontCare);
-                    bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + i + "-" + j + ".png");
+                    string fileName = i + "-" + j + ".png";
+                    bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
+
+                    ImageURL imageURL = new ImageURL();
+                    imageURL.URL = imageFilePath + fileName;
+                    lstImageURL.Add(imageURL);
                 }
             }
             return lstImageURL;
