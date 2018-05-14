@@ -49,6 +49,9 @@ namespace Interactive_Captcha
 
             int currentX = 0;
             int currentY = 0;
+            int currentImageCount = 1;
+
+            HashSet<int> excludedNumbers = GetRandomExcludedNumbers();
 
             for (int i = 0; i < 3; i++)
             {
@@ -67,15 +70,61 @@ namespace Interactive_Captcha
                     Rectangle cropArea = new Rectangle(currentX, currentY, widthCropSize, heightCropSize);
                     //cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
                     Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, System.Drawing.Imaging.PixelFormat.DontCare);
+                    RotateFlipType rotationDegree = GetRotationDegree();
+
+                    // Check if the current image is excluded from rotating or not 
+                    if (!excludedNumbers.Contains(currentImageCount))
+                    {
+                        // Apply rotation
+                        bmpCroppedImage.RotateFlip(rotationDegree);
+                    }
                     string fileName = i + "-" + j + ".png";
                     bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
 
+                    // Create imageURL image
                     ImageURL imageURL = new ImageURL();
                     imageURL.URL = imageFilePath + fileName;
                     lstImageURL.Add(imageURL);
                 }
             }
             return lstImageURL;
+        }
+
+        private HashSet<int> GetRandomExcludedNumbers()
+        {
+            HashSet<int> excludedNumbers = new HashSet<int>();
+            
+            for (int i = 0; i < 3; i++){
+                var range = Enumerable.Range(1, 12).Where(x => !excludedNumbers.Contains(i));
+                var rand = new Random();
+                int index = rand.Next(0, 12 - excludedNumbers.Count);
+                excludedNumbers.Add(range.ElementAt(index));
+            }
+
+            return excludedNumbers;
+        }
+
+        private RotateFlipType GetRotationDegree()
+        {
+            Random random = new Random();
+            int rotateType = random.Next(1, 4);
+            RotateFlipType degree = RotateFlipType.RotateNoneFlipNone;
+            switch (rotateType)
+            {
+                case 1:
+                    degree = RotateFlipType.Rotate90FlipNone;
+                    break;
+
+                case 2:
+                    degree = RotateFlipType.Rotate180FlipNone;
+                    break;
+
+                case 3:
+                    degree = RotateFlipType.Rotate270FlipNone;
+                    break;
+            }
+
+            return degree;
         }
 
         public int GetRandomImageName()
