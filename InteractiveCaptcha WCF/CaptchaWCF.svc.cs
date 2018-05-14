@@ -97,6 +97,7 @@ namespace Interactive_Captcha
                         // Create imageURL image
                         ImageURL imageURL = new ImageURL();
                         imageURL.URL = imageFilePath + fileName;
+                        imageURL.CaptchaId = captchaId;
                         lstImageURL.Add(imageURL);
                         currentImageCount++;
                     }

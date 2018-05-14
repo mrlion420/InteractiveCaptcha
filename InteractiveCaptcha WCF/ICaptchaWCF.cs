@@ -61,6 +61,15 @@ namespace Interactive_Captcha
     {
         private string url;
         private double degree;
+        private int captchaId;
+
+        [DataMember]
+        public int CaptchaId
+        {
+            get { return captchaId; }
+            set { captchaId = value; }
+        }
+
 
         [DataMember]
         public double Degree
