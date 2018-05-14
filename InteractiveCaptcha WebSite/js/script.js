@@ -1,4 +1,5 @@
 ﻿var webServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
+// var webServiceHost = "http://localhost:55155/CaptchaWCF.svc";
 
 $(document).ready(function () {
     GetCaptchaImages();

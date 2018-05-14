@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
@@ -70,14 +71,15 @@ namespace Interactive_Captcha
                     Rectangle cropArea = new Rectangle(currentX, currentY, widthCropSize, heightCropSize);
                     //cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
                     Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, System.Drawing.Imaging.PixelFormat.DontCare);
-                    RotateFlipType rotationDegree = GetRotationDegree();
-
+                    
                     // Check if the current image is excluded from rotating or not 
                     if (!excludedNumbers.Contains(currentImageCount))
                     {
+                        RotateFlipType rotationDegree = GetRotationDegree();
                         // Apply rotation
                         bmpCroppedImage.RotateFlip(rotationDegree);
                     }
+                    
                     string fileName = i + "-" + j + ".png";
                     bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
 
@@ -85,6 +87,7 @@ namespace Interactive_Captcha
                     ImageURL imageURL = new ImageURL();
                     imageURL.URL = imageFilePath + fileName;
                     lstImageURL.Add(imageURL);
+                    currentImageCount++;
                 }
             }
             return lstImageURL;
@@ -93,14 +96,13 @@ namespace Interactive_Captcha
         private HashSet<int> GetRandomExcludedNumbers()
         {
             HashSet<int> excludedNumbers = new HashSet<int>();
-            
+            var rand = new Random();
+
             for (int i = 0; i < 3; i++){
-                var range = Enumerable.Range(1, 12).Where(x => !excludedNumbers.Contains(i));
-                var rand = new Random();
-                int index = rand.Next(0, 12 - excludedNumbers.Count);
+                var range = Enumerable.Range(1, 9).Where(x => !excludedNumbers.Contains(x));
+                int index = rand.Next(0, 9 - excludedNumbers.Count);
                 excludedNumbers.Add(range.ElementAt(index));
             }
-
             return excludedNumbers;
         }
 
