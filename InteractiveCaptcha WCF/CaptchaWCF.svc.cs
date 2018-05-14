@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatabaseManager;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -37,11 +38,13 @@ namespace Interactive_Captcha
 
         public List<ImageURL> GetCaptcha()
         {
-            
+
             List<ImageURL> lstImageURL = new List<ImageURL>();
             string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
             string imageFilePath = currentDirectory + @"\OutputImg\";
-            Image img = Image.FromFile(currentDirectory + @"\SourceImg\1.jpg");
+
+            string imageName = GetRandomImageName();
+            Image img = Image.FromFile(currentDirectory + @"\SourceImg\" + imageName + ".jpg");
             Bitmap bmpImg = new Bitmap(img);
             int width = bmpImg.Width;
             int height = bmpImg.Height;
@@ -51,46 +54,75 @@ namespace Interactive_Captcha
             int currentX = 0;
             int currentY = 0;
             int currentImageCount = 1;
+            int captchaId = 0;
+
+            List<short> imageDegreeLst = new List<short>();
 
             HashSet<int> excludedNumbers = GetRandomExcludedNumbers();
 
-            for (int i = 0; i < 3; i++)
-            {
-                if (i != 0)
-                {
-                    currentY += heightCropSize;
-                }
-                // Reset X coordinates when Y is changed
-                currentX = 0;
-                for (int j = 0; j < 3; j++)
-                {
-                    if (j != 0)
-                    {
-                        currentX += widthCropSize;
-                    }
-                    Rectangle cropArea = new Rectangle(currentX, currentY, widthCropSize, heightCropSize);
-                    //cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
-                    Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, System.Drawing.Imaging.PixelFormat.DontCare);
-                    
-                    // Check if the current image is excluded from rotating or not 
-                    if (!excludedNumbers.Contains(currentImageCount))
-                    {
-                        RotateFlipType rotationDegree = GetRotationDegree();
-                        // Apply rotation
-                        bmpCroppedImage.RotateFlip(rotationDegree);
-                    }
-                    
-                    string fileName = i + "-" + j + ".png";
-                    bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
+            CaptchaSession captchaSession = new CaptchaSession();
+            captchaSession.ImageName = imageName;
 
-                    // Create imageURL image
-                    ImageURL imageURL = new ImageURL();
-                    imageURL.URL = imageFilePath + fileName;
-                    lstImageURL.Add(imageURL);
-                    currentImageCount++;
+            if (captchaSession.Insert(ref captchaId))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (i != 0)
+                    {
+                        currentY += heightCropSize;
+                    }
+                    // Reset X coordinates when Y is changed
+                    currentX = 0;
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (j != 0)
+                        {
+                            currentX += widthCropSize;
+                        }
+                        Rectangle cropArea = new Rectangle(currentX, currentY, widthCropSize, heightCropSize);
+                        //cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
+                        Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, System.Drawing.Imaging.PixelFormat.DontCare);
+                        short rotationDegreeInt = 0;
+                        // Check if the current image is excluded from rotating or not 
+                        if (!excludedNumbers.Contains(currentImageCount))
+                        {
+                            RotateFlipType rotationDegree = GetRotationDegree(ref rotationDegreeInt);
+                            // Apply rotation
+                            bmpCroppedImage.RotateFlip(rotationDegree);
+                        }
+
+                        string fileName = captchaId + "-" + i + "-" + j + ".png";
+                        bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
+                        imageDegreeLst.Add(rotationDegreeInt);
+                        // Create imageURL image
+                        ImageURL imageURL = new ImageURL();
+                        imageURL.URL = imageFilePath + fileName;
+                        lstImageURL.Add(imageURL);
+                        currentImageCount++;
+                    }
+                }
+
+                CaptchaAttributes captchaAttri = new CaptchaAttributes();
+                captchaAttri.CaptchaID = captchaId;
+                captchaAttri.Tile1Angle = imageDegreeLst[0];
+                captchaAttri.Tile2Angle = imageDegreeLst[1];
+                captchaAttri.Tile3Angle = imageDegreeLst[2];
+                captchaAttri.Tile4Angle = imageDegreeLst[3];
+                captchaAttri.Tile5Angle = imageDegreeLst[4];
+                captchaAttri.Tile6Angle = imageDegreeLst[5];
+                captchaAttri.Tile7Angle = imageDegreeLst[6];
+                captchaAttri.Tile8Angle = imageDegreeLst[7];
+                captchaAttri.Tile9Angle = imageDegreeLst[8];
+
+                if (!captchaAttri.Insert())
+                {
+                    // Return empy list if insertion throws an error
+                    return new List<ImageURL>();
                 }
             }
+
             return lstImageURL;
+
         }
 
         private HashSet<int> GetRandomExcludedNumbers()
@@ -98,7 +130,8 @@ namespace Interactive_Captcha
             HashSet<int> excludedNumbers = new HashSet<int>();
             var rand = new Random();
 
-            for (int i = 0; i < 3; i++){
+            for (int i = 0; i < 3; i++)
+            {
                 var range = Enumerable.Range(1, 9).Where(x => !excludedNumbers.Contains(x));
                 int index = rand.Next(0, 9 - excludedNumbers.Count);
                 excludedNumbers.Add(range.ElementAt(index));
@@ -106,7 +139,7 @@ namespace Interactive_Captcha
             return excludedNumbers;
         }
 
-        private RotateFlipType GetRotationDegree()
+        private RotateFlipType GetRotationDegree(ref short rotationDegreeInt)
         {
             Random random = new Random();
             int rotateType = random.Next(1, 4);
@@ -115,21 +148,24 @@ namespace Interactive_Captcha
             {
                 case 1:
                     degree = RotateFlipType.Rotate90FlipNone;
+                    rotationDegreeInt = 90;
                     break;
 
                 case 2:
                     degree = RotateFlipType.Rotate180FlipNone;
+                    rotationDegreeInt = 180;
                     break;
 
                 case 3:
                     degree = RotateFlipType.Rotate270FlipNone;
+                    rotationDegreeInt = 270;
                     break;
             }
 
             return degree;
         }
 
-        public int GetRandomImageName()
+        private string GetRandomImageName()
         {
             //using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
             //{
@@ -138,18 +174,26 @@ namespace Interactive_Captcha
             //    result = BitConverter.ToInt32(randomByte, 0);
             //}
             Random rnd = new Random();
-            int result = rnd.Next(1, 13); // creates a number between 1 and 12
+            int result = rnd.Next(1, 4); // creates a number between 1 and 12
 
-            return result;
+            return result.ToString();
         }
 
-        public bool CheckResult(long sessionId)
+        public bool CheckResult(long sessionId, string dataString)
         {
+            var singleImageString = dataString.Split(';');
+
+            for (int i = 0; i < singleImageString.Length; i++)
+            {
+                var imageKVP = singleImageString[i].Split('-');
+
+            }
+
             return true;
         }
 
         #region Utility Methods
-   
+
         public string GetRandomImageFromFolder()
         {
             return string.Empty;

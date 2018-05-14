@@ -32,7 +32,7 @@ namespace DatabaseManager
         public short Tile3Angle { get; set; }
 
         DatabaseManager database = new DatabaseManager();
-        CaptchaAttributes obj = new CaptchaAttributes();
+
 
         public CaptchaAttributes()
         {
@@ -52,25 +52,25 @@ namespace DatabaseManager
             //)
         }
 
-        public bool Insert(CaptchaAttributes obj)
+        public bool Insert()
         {
             bool result = false;
-            string query = @"INSERT INTO captcha_attributes(CaptchaAttributeId,Tile1Angle,Tile2Angle,Tile3Angle,Tile4Angle, " +
-                "Tile5Angle, Tile6Angle, Tile7Angle, Tile8Angle, Tile9Angle) VALUES(@captchaAttributeId, @tile1, @tile2, @tile3, @tile4, @tile5, @tile6, @tile7, @tile8)";
+            string query = @"INSERT INTO captcha_attributes(CaptchaId,Tile1Angle,Tile2Angle,Tile3Angle,Tile4Angle, " +
+                "Tile5Angle, Tile6Angle, Tile7Angle, Tile8Angle, Tile9Angle) VALUES(@captchaId, @tile1, @tile2, @tile3, @tile4, @tile5, @tile6, @tile7, @tile8, @tile9)";
 
             if (database.OpenConnection())
             {
                 MySqlCommand cmd = new MySqlCommand(query, database.Connection);
-                cmd.Parameters.AddWithValue("@captchaAttributeId", obj.CaptchaAttributeID);
-                cmd.Parameters.AddWithValue("@tile1", obj.Tile1Angle);
-                cmd.Parameters.AddWithValue("@tile2", obj.Tile2Angle);
-                cmd.Parameters.AddWithValue("@tile3", obj.Tile3Angle);
-                cmd.Parameters.AddWithValue("@tile4", obj.Tile4Angle);
-                cmd.Parameters.AddWithValue("@tile5", obj.Tile5Angle);
-                cmd.Parameters.AddWithValue("@tile6", obj.Tile6Angle);
-                cmd.Parameters.AddWithValue("@tile7", obj.Tile7Angle);
-                cmd.Parameters.AddWithValue("@tile8", obj.Tile8Angle);
-                cmd.Parameters.AddWithValue("@tile9", obj.Tile9Angle);
+                cmd.Parameters.AddWithValue("@captchaId", CaptchaID);
+                cmd.Parameters.AddWithValue("@tile1", Tile1Angle);
+                cmd.Parameters.AddWithValue("@tile2", Tile2Angle);
+                cmd.Parameters.AddWithValue("@tile3", Tile3Angle);
+                cmd.Parameters.AddWithValue("@tile4", Tile4Angle);
+                cmd.Parameters.AddWithValue("@tile5", Tile5Angle);
+                cmd.Parameters.AddWithValue("@tile6", Tile6Angle);
+                cmd.Parameters.AddWithValue("@tile7", Tile7Angle);
+                cmd.Parameters.AddWithValue("@tile8", Tile8Angle);
+                cmd.Parameters.AddWithValue("@tile9", Tile9Angle);
 
                 int numberOfRows = cmd.ExecuteNonQuery();
                 if(numberOfRows >= 1)
@@ -85,7 +85,7 @@ namespace DatabaseManager
 
         public CaptchaAttributes GetCaptchaAttribute_ById(long captchaAttributeId)
         {
-
+            CaptchaAttributes obj = new CaptchaAttributes();
             string query = "SELECT * FROM captcha_attributes WHERE CaptchaAttributeId = @captchaAttributeId";
             if (database.OpenConnection())
             {

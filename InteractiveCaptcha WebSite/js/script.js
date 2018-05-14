@@ -1,5 +1,5 @@
-﻿var webServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
-// var webServiceHost = "http://localhost:55155/CaptchaWCF.svc";
+﻿// var webServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
+var webServiceHost = "http://localhost:55155/CaptchaWCF.svc";
 
 $(document).ready(function () {
     GetCaptchaImages();
@@ -32,7 +32,7 @@ function GetCaptcha_Success(data){
             htmlString += "<div class='table'>";
         }
         htmlString += "<div class='cell'>";
-        htmlString += "<img class='bigger imageclick' id='image-" + currentCount + "' src='" + value.URL + "' data-degree='0'/>";
+        htmlString += "<img class='bigger imageclick captcha-image' id='image-" + currentCount + "' src='" + value.URL + "' data-degree='0'/>";
         htmlString += "</div>";
         count++;
         if(count % 3 === 0){
@@ -41,26 +41,39 @@ function GetCaptcha_Success(data){
         }
         currentCount++;
     });
-
-    // for(let i = 1; i <= data.length; i++){
-    //     if(i === 1){
-    //         htmlString += "<div class='table'>";
-    //     } else if ( i % 3 === 0){
-    //         htmlString += "</div>";
-    //         htmlString += "<div class='table'>";
-    //     }
-    //     htmlString += "<div class='cell'>";
-    //     htmlString += "<img class='bigger imageclick' id='image-" + i + "' src='" + data[i- 1].URL + "' data-degree='0'/>";
-    //     htmlString += "</div>";
-    //     if(i % 3 === 0){
-    //         htmlString += "</div>";
-    //     }
-    // }
     $("#tile").html(htmlString);
 }
 
 function GetCaptcha_Error(){
     // ERROR IN GETTING CAPTCHA
+}
+
+function CheckResult() {
+    let captchaImages = document.getElementsByClassName('captcha-images');
+    let dataString = "";
+    for(let i = 0; i < captchaImages.length; i++){
+        let image = captchaImages[i];
+        let imageId = image.id;
+        let currentAngle = $("#" + imageId).data("degree");
+        dataString += imageId + "-" + currentAngle + ";";
+    }
+    let data = { dataString : dataString };
+    let methodName = "CheckResult";
+    ajaxGet(methodName, data, CheckResult_Success, CheckResult_Error);
+}
+
+function CheckResult_Success(data){
+    if(data.Result === true){
+        $("#captchaSuccess").fadeIn(1000);
+        $(".tile").css("opacity", 0.3);
+    }else{
+        $("#captchaError").fadeIn(1000);
+        $(".tile").css("opacity", 0.3);
+    }
+}
+
+function CheckResult_Error(data){
+
 }
 
 //function getRotationDegrees(imageObj) {

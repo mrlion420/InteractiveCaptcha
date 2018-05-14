@@ -23,7 +23,7 @@ namespace Interactive_Captcha
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]
-        bool CheckResult(long sessionId);
+        bool CheckResult(long sessionId, string dataString);
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]

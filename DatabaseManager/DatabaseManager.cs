@@ -32,9 +32,9 @@ namespace DatabaseManager
         private void Initialize()
         {
             server = "localhost";
-            database = "csci321";
+            database = "interactive_captcha";
             uid = "root";
-            password = "Kennieisgreat1!";
+            password = "toor";
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
             connection = new MySqlConnection(connectionString);
@@ -47,7 +47,7 @@ namespace DatabaseManager
                 connection.Open();
                 return true;
             }
-            catch(MySqlException)
+            catch(MySqlException ex)
             {
                 return false;
             }
@@ -57,6 +57,7 @@ namespace DatabaseManager
             try
             {
                 connection.Close();
+                connection.Dispose();
                 return true;
             }
             catch(MySqlException)
