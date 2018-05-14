@@ -18,6 +18,8 @@ namespace Interactive_Captcha
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class CaptchaWCF : ICaptchaWCF
     {
+        public string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+
         public string GetData(int value)
         {
             return string.Format("You entered: {0}", value);
@@ -38,12 +40,11 @@ namespace Interactive_Captcha
 
         public List<ImageURL> GetCaptcha()
         {
-
             List<ImageURL> lstImageURL = new List<ImageURL>();
-            string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
-            string imageFilePath = currentDirectory + @"\OutputImg\";
 
+            string imageFilePath = currentDirectory + @"\OutputImg\";
             string imageName = GetRandomImageName();
+
             Image img = Image.FromFile(currentDirectory + @"\SourceImg\" + imageName + ".jpg");
             Bitmap bmpImg = new Bitmap(img);
             int width = bmpImg.Width;
@@ -168,14 +169,10 @@ namespace Interactive_Captcha
 
         private string GetRandomImageName()
         {
-            //using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-            //{
-            //    byte[] randomByte = new byte[5];
-            //    rng.GetBytes(randomByte);
-            //    result = BitConverter.ToInt32(randomByte, 0);
-            //}
+            DirectoryInfo dirInfo = new DirectoryInfo(currentDirectory + @"\SourceImg\");
+            int fileCount = dirInfo.EnumerateFiles("*.*", SearchOption.AllDirectories).Count();
             Random rnd = new Random();
-            int result = rnd.Next(1, 4); // creates a number between 1 and 12
+            int result = rnd.Next(1, fileCount + 1); // creates a number between 1 and 12
 
             return result.ToString();
         }

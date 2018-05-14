@@ -28,6 +28,7 @@ function GetCaptcha_Success(data){
     let htmlString = "";
     let count = 0;
     let currentCount = 1;
+    captchaId = data[0].CaptchaId;
     $.each(data, function(key, value){
         if(count === 0){
             htmlString += "<div class='table'>";
