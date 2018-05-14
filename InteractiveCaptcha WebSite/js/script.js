@@ -6,7 +6,7 @@ $(document).ready(function () {
 });
 
 function ajaxGet(methodName, data, successCallBack, errorCallBack){
-	let url = webServiceHost + "/" + methodName + "?callback=?";
+	let url = webServiceHost + "/" + methodName;
 	return $.ajax({
 		type: 'GET',
 		url: url,

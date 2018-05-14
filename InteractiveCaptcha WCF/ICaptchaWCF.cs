@@ -29,7 +29,6 @@ namespace Interactive_Captcha
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]
         List<ImageURL> GetCaptcha();
 
-
         // TODO: Add your service operations here
     }
 
