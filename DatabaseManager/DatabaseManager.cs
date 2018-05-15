@@ -12,13 +12,8 @@ namespace DatabaseManager
 {
    class DatabaseManager
     {
-        private MySqlConnection connection;
 
-        public MySqlConnection Connection
-        {
-            get { return connection; }
-            set { connection = value; }
-        }
+        public MySqlConnection Connection { get; set; }
 
         private string server;
         private string database;
@@ -37,14 +32,14 @@ namespace DatabaseManager
             password = "toor";
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-            connection = new MySqlConnection(connectionString);
+            Connection = new MySqlConnection(connectionString);
         }
 
         public bool OpenConnection()
         {
             try
             {
-                connection.Open();
+                Connection.Open();
                 return true;
             }
             catch(MySqlException ex)
@@ -56,8 +51,8 @@ namespace DatabaseManager
         {
             try
             {
-                connection.Close();
-                connection.Dispose();
+                Connection.Close();
+                Connection.Dispose();
                 return true;
             }
             catch(MySqlException)
