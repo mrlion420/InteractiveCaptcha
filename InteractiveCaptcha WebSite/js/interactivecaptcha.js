@@ -28,11 +28,40 @@ var interactive_captcha = (function(){
         });
     } 
 
+    function ShowLoadingIcon(){
+        $("#icLoading").show();
+    }
+
+    function HideLoadingIcon(){
+        $("#icLoading").hide();
+    }
+
     var Init = function(renderId){
-        click();
+        let htmlString = "";
+        btnClick();
         gRenderId = renderId;
+        // Generate the container first
+        htmlString += "<div class='ic-container'>";
+        htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
+        htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
+                      "<p> class='ic-text'>Successful!</p></div>";
+        htmlString += "<div class='ic-textblock' id='icError'>" + 
+                      "<p class='ic-text ic-error'>Please Try Again!</p></div>";
+        htmlString += "<div class='ic-tile' id='icTile'>";
+        htmlString += "</div>";
+        htmlString += "<button class='ic-button' id='icConfirm'>Confirm</button>";
+        htmlString += "<button class='ic-button' id='icReload'>↻</button>";
+        htmlString += "</div>";
+        $("#" + gRenderId).html(htmlString);
+        ShowLoadingIcon();
         let methodName = "GetCaptcha";
-        ajaxGet(methodName, null, GetCaptcha_Success, GetCaptcha_Error);
+
+        try{
+            ajaxGet(methodName, null, GetCaptcha_Success, GetCaptcha_Error);
+        }catch(ex){
+            $("#captchaError").fadeIn(1000);
+        }
+        
     };
 
     function GetCaptcha_Success(data){
@@ -40,13 +69,7 @@ var interactive_captcha = (function(){
         let count = 0;
         let currentCount = 1;
         gCaptchaId = data[0].CaptchaId;
-        htmlString += "<div class='ic-container'>";
-        htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
-        htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
-                      "<p> class='ic-text'>Successful!</p></div>";
-        htmlString += "<div class='ic-textblock' id='icError>" + 
-                      "<p class='ic-text ic-error'>Please Try Again!</p></div>"
-        htmlString += "<div class='ic-tile'>";
+        
         $.each(data, function(key, value){
             if(count === 0){
                 htmlString += "<div class='ic-table'>";
@@ -61,16 +84,15 @@ var interactive_captcha = (function(){
             }
             currentCount++;
         });
-        htmlString += "</div>";
-        htmlString += "<button class='ic-button' id='icConfirm'>Confirm</button>";
-        // htmlString += "<button class='ic-button' id='icReload'>Reload</button>";
-        htmlString += "<button class='ic-button' id='icReload'>↻</button>";
-        htmlString += "</div>";
-        $("#" + gRenderId).html(htmlString);
+        
+        $("#icTile").html(htmlString);
+        HideLoadingIcon();
     }
 
     function GetCaptcha_Error(){
         // ERROR IN GETTING CAPTCHA
+        HideLoadingIcon();
+        $("#icError").fadeIn(1000);
     }
 
     var CheckResult = function(){
@@ -101,7 +123,7 @@ var interactive_captcha = (function(){
         // ERROR IN GETTING RESULT
     }
 
-    function click(){
+    function btnClick(){
         $(".tile").on("click", "img", function(){
             let currentAngle = $(this).data("degree");
             currentAngle += 90;
