@@ -40,12 +40,19 @@ var interactive_captcha = (function(){
         let count = 0;
         let currentCount = 1;
         gCaptchaId = data[0].CaptchaId;
+        htmlString += "<div class='ic-container'>";
+        htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
+        htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
+                      "<p> class='ic-text'>Successful!</p></div>";
+        htmlString += "<div class='ic-textblock' id='icError>" + 
+                      "<p class='ic-text ic-error'>Please Try Again!</p></div>"
+        htmlString += "<div class='ic-tile'>";
         $.each(data, function(key, value){
             if(count === 0){
-                htmlString += "<div class='table'>";
+                htmlString += "<div class='ic-table'>";
             }
-            htmlString += "<div class='cell'>";
-            htmlString += "<img class='bigger imageclick captcha-image' id='captcha-" + currentCount + "' src='" + value.URL + "' data-degree='0'/>";
+            htmlString += "<div class='ic-cell'>";
+            htmlString += "<img class='ic-bigOnHover imageclick captcha-image' id='captcha-" + currentCount + "' src='" + value.URL + "' data-degree='0'/>";
             htmlString += "</div>";
             count++;
             if(count % 3 === 0){
@@ -54,6 +61,11 @@ var interactive_captcha = (function(){
             }
             currentCount++;
         });
+        htmlString += "</div>";
+        htmlString += "<button class='ic-button' id='icConfirm'>Confirm</button>";
+        // htmlString += "<button class='ic-button' id='icReload'>Reload</button>";
+        htmlString += "<button class='ic-button' id='icReload'>↻</button>";
+        htmlString += "</div>";
         $("#" + gRenderId).html(htmlString);
     }
 
@@ -77,7 +89,7 @@ var interactive_captcha = (function(){
 
     function CheckResult_Success(data){
         if(data === true){
-            $("#captchaSuccess").fadeIn(1000);
+            $("#interactiveCaptchaSuccess").fadeIn(1000);
             $(".tile").css("opacity", 0.3);
         }else{
             $("#captchaError").fadeIn(1000);
@@ -101,8 +113,8 @@ var interactive_captcha = (function(){
             CheckResult();
         });
     
-        $("#reload").click(function () {
-            window.location.reload();
+        $("#icReload").click(function () {
+            Init(gRenderId);
         });
     }
 

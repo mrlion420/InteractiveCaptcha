@@ -1,51 +1,51 @@
-﻿.container {
+﻿.ic-container {
     position: relative;
     width: 330px;
 }
 
-.tile {
+.ic-tile {
     border-collapse: collapse;
 }
 
-.table {
+.ic-tile .ic-table {
     display: table-row;
-    
 }
 
-.cell {
+.ic-tile .ic-table .ic-cell {
     display: table-cell;
     width: 110px;
     height: 110px;
 }
 
-.bigger {
+.ic-bigOnHover {
     transition: width .3s, height .3s, margin .3s, transform .3s;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     width: 100px;
     height: 100px;
-    margin : 5px;
+    margin: 5px;
     position: absolute;
-    transform : rotate(0deg);
+    transform: rotate(0deg);
 }
 
-.bigger:hover {
+.ic-bigOnHover:hover {
     cursor: pointer;
     width: 110px;
     height: 110px;
     margin: 0px;
-    display: block;  
+    display: block;
 }
 
-.button {
+.ic-button {
     background-color: #4286f4;
+    border-radius: 28px;
     -moz-border-radius: 28px;
     -webkit-border-radius: 28px;
     border: 0px;
     color: #FFF;
     display: inline-block;
     width: 90px;
-    height: 30px;
+    height: 32px;
     margin-left: 10px;
     margin-top: 10px;
     text-align: center;
@@ -54,11 +54,15 @@
     cursor: pointer;
 }
 
-.button:hover {
+.ic-button:hover {
     background-color: #0c51f5;
 }
 
-.text-block {
+#icReload{
+    font-size: 22px;
+}
+
+.ic-textblock {
     display: none;
     position: absolute;
     z-index: 2;
@@ -66,7 +70,7 @@
     height: 100%;
 }
 
-.text {
+.ic-text {
     height: 50%;
     text-align: center;
     color: #0a7e1a;
@@ -75,3 +79,63 @@
     margin: 0;
     padding: 43% 0px 0px 0px;
 }
+
+.ic-error {
+    color: red !important;
+}
+
+.lds-css{
+    position: absolute;
+    z-index: 3;
+    width: 100%;
+    height:100%;
+}
+@keyframes lds-rolling {
+    0% {
+      -webkit-transform: translate(-50%, -50%) rotate(0deg);
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+      -webkit-transform: translate(-50%, -50%) rotate(360deg);
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  @-webkit-keyframes lds-rolling {
+    0% {
+      -webkit-transform: translate(-50%, -50%) rotate(0deg);
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+      -webkit-transform: translate(-50%, -50%) rotate(360deg);
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  .lds-rolling {
+    position: relative;
+  }
+  .lds-rolling div,
+  .lds-rolling div:after {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: 14px solid #1c4595;
+    border-top-color: transparent;
+    border-radius: 50%;
+  }
+  .lds-rolling div {
+    -webkit-animation: lds-rolling 1s linear infinite;
+    animation: lds-rolling 1s linear infinite;
+    top: 160px;
+    left: 160px;
+  }
+  .lds-rolling div:after {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+  .lds-rolling {
+    width: 120 !important;
+    height: 120px !important;
+    -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+    transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  }
+  </style>

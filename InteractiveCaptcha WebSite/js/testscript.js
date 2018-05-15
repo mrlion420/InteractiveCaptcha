@@ -1,3 +1,3 @@
 $(document).ready(function () {
-    interactive_captcha.Init("tile");
+    interactive_captcha.Init("here");
 });
