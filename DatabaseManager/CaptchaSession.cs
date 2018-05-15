@@ -109,7 +109,6 @@ namespace DatabaseManager
 
                 database.CloseConnection();
 
-
             }
 
             return obj;

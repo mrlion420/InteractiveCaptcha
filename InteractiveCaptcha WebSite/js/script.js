@@ -13,7 +13,20 @@ function ajaxGet(methodName, data, successCallBack, errorCallBack){
 		type: 'GET',
 		url: url,
 		data: data,
-		dataType: 'jsonp',
+		dataType: 'json',
+        success: successCallBack,
+        error : errorCallBack
+	});
+}
+
+function ajaxPost(methodName, data, successCallBack, errorCallBack){
+	let url = webServiceHost + "/" + methodName;
+	return $.ajax({
+		type: 'POST',
+		url: url,
+		data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: "application/json;charset=utf-8",
         success: successCallBack,
         error : errorCallBack
 	});
@@ -34,7 +47,7 @@ function GetCaptcha_Success(data){
             htmlString += "<div class='table'>";
         }
         htmlString += "<div class='cell'>";
-        htmlString += "<img class='bigger imageclick captcha-image' id='image-" + currentCount + "' src='" + value.URL + "' data-degree='0'/>";
+        htmlString += "<img class='bigger imageclick captcha-image' id='captcha-" + currentCount + "' src='" + value.URL + "' data-degree='0'/>";
         htmlString += "</div>";
         count++;
         if(count % 3 === 0){
@@ -51,21 +64,22 @@ function GetCaptcha_Error(){
 }
 
 function CheckResult() {
-    let captchaImages = document.getElementsByClassName('captcha-images');
+    let captchaImages = document.getElementsByClassName('captcha-image');
     let dataString = "";
     for(let i = 0; i < captchaImages.length; i++){
         let image = captchaImages[i];
         let imageId = image.id;
         let currentAngle = $("#" + imageId).data("degree");
-        dataString += imageId + "-" + currentAngle + ";";
+        dataString += imageId + "=" + currentAngle + ";";
     }
-    let data = { dataString : dataString };
+    let data = { captchaId : captchaId , dataString : dataString };
     let methodName = "CheckResult";
-    ajaxGet(methodName, data, CheckResult_Success, CheckResult_Error);
+    ajaxPost(methodName, data, CheckResult_Success, CheckResult_Error);
 }
 
 function CheckResult_Success(data){
-    if(data.Result === true){
+    console.log(data);
+    if(data === true){
         $("#captchaSuccess").fadeIn(1000);
         $(".tile").css("opacity", 0.3);
     }else{
@@ -104,8 +118,7 @@ function click(){
     });
 
     $("#confirm").click(function () {
-        $("#success").fadeIn(1000);
-        $(".tile").css("opacity", 0.3);
+        CheckResult();
     });
 
     $("#confirmError").click(function () {

@@ -22,12 +22,16 @@ namespace Interactive_Captcha
         // End of examples
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]
-        bool CheckResult(long sessionId, string dataString);
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool CheckResult(int captchaId, string dataString);
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]
         List<ImageURL> GetCaptcha();
+
+        [OperationContract]
+        [WebInvoke(Method = "OPTIONS", UriTemplate = "*")]
+        void GetOptions();
 
         // TODO: Add your service operations here
     }

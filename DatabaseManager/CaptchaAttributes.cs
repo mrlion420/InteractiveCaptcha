@@ -83,14 +83,14 @@ namespace DatabaseManager
             return result;
         }
 
-        public CaptchaAttributes GetCaptchaAttribute_ById(long captchaAttributeId)
+        public CaptchaAttributes GetCaptchaAttribute_ById(int captchaId)
         {
             CaptchaAttributes obj = new CaptchaAttributes();
-            string query = "SELECT * FROM captcha_attributes WHERE CaptchaAttributeId = @captchaAttributeId";
+            string query = "SELECT * FROM captcha_attributes WHERE captchaID = @captchaId";
             if (database.OpenConnection())
             {
                 MySqlCommand cmd = new MySqlCommand(query, database.Connection);
-                cmd.Parameters.AddWithValue("@captchaAttributeId", captchaAttributeId);
+                cmd.Parameters.AddWithValue("@captchaId", captchaId);
                 MySqlDataReader dataReader = cmd.ExecuteReader();
                 while (dataReader.Read())
                 {

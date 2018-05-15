@@ -38,6 +38,10 @@ namespace Interactive_Captcha
             return composite;
         }
 
+        public void GetOptions()
+        {
+        }
+
         public List<ImageURL> GetCaptcha()
         {
             List<ImageURL> lstImageURL = new List<ImageURL>();
@@ -122,9 +126,91 @@ namespace Interactive_Captcha
                     return new List<ImageURL>();
                 }
             }
-
             return lstImageURL;
+        }
 
+        public bool CheckResult(int captchaId, string dataString)
+        {
+            bool result = false;
+            CaptchaAttributes captchaAttributes = new CaptchaAttributes();
+            captchaAttributes = captchaAttributes.GetCaptchaAttribute_ById(captchaId);
+
+            var singleImageString = dataString.Split(';');
+
+            for (int i = 0; i < singleImageString.Length; i++)
+            {
+                // CODE OPTIMIZATION HERE
+                if (i == 0 && !String.IsNullOrWhiteSpace(singleImageString[i]) || result && !String.IsNullOrWhiteSpace(singleImageString[i]))
+                {
+                    var imageKVP = singleImageString[i].Split('=');
+                    short currentDegree = Convert.ToInt16(imageKVP[1]);
+                    switch (imageKVP[0])
+                    {
+                        case "captcha-1":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile1Angle);
+                            break;
+
+                        case "captcha-2":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile2Angle);
+                            break;
+
+                        case "captcha-3":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile3Angle);
+                            break;
+
+                        case "captcha-4":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile4Angle);
+                            break;
+
+                        case "captcha-5":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile5Angle);
+                            break;
+
+                        case "captcha-6":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile6Angle);
+                            break;
+
+                        case "captcha-7":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile7Angle);
+                            break;
+
+                        case "captcha-8":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile8Angle);
+                            break;
+
+                        case "captcha-9":
+                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile9Angle);
+                            break;
+                    }
+                }
+                
+            }
+            return result;
+        }
+
+        #region Utility Methods
+
+        private bool isImageDegreeCorrect(int currentDegree, short rotatedDegree)
+        {
+            bool result = false;
+            int totalCompletedTurns = currentDegree / 360; // Will only return int
+            int degreeTurnedUnder360 = currentDegree - (360 * totalCompletedTurns);
+            int finalDegree = degreeTurnedUnder360 + rotatedDegree;
+            if(rotatedDegree == 0)
+            {
+                if (finalDegree == 0)
+                {
+                    result = true;
+                }
+            }
+            else
+            {
+                if(finalDegree == 360)
+                {
+                    result = true;
+                }
+            }
+            return result;
         }
 
         private HashSet<int> GetRandomExcludedNumbers()
@@ -175,26 +261,6 @@ namespace Interactive_Captcha
             int result = rnd.Next(1, fileCount + 1); // creates a number between 1 and 12
 
             return result.ToString();
-        }
-
-        public bool CheckResult(long sessionId, string dataString)
-        {
-            var singleImageString = dataString.Split(';');
-
-            for (int i = 0; i < singleImageString.Length; i++)
-            {
-                var imageKVP = singleImageString[i].Split('-');
-
-            }
-
-            return true;
-        }
-
-        #region Utility Methods
-
-        public string GetRandomImageFromFolder()
-        {
-            return string.Empty;
         }
 
         #endregion
