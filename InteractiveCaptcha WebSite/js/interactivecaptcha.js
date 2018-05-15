@@ -55,6 +55,7 @@ var interactive_captcha = (function(){
         gRenderId = renderId;
         // Generate the container first
         htmlString += "<div class='ic-container'>";
+        htmlString += "<h1>Captcha (Click to rotate)</h1>";
         htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
         htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
                       "<p> class='ic-text'>Successful!</p></div>";
@@ -189,17 +190,20 @@ var interactive_captcha = (function(){
         });
     
         $("#icReload").click(function () {
-            if(gInitWithoutBtn){
-                Init(gRenderId);
-            }else{
-                InitWithoutButton(gRenderId);
-            }
-            
+            Reload();
         });
     }
 
-    var setCallback = function(callback){
+    var SetCallback = function(callback){
         gCallback = callback;
+    };
+
+    var Reload = function(){
+        if(gInitWithoutBtn){
+            InitWithoutButton(gRenderId);
+        }else{
+            Init(gRenderId);
+        }
     };
 
     return {
@@ -209,7 +213,8 @@ var interactive_captcha = (function(){
         CheckResultDefault : CheckResultDefault,
         ShowErrorMesg : ShowErrorMesg,
         ShowSuccessMesg : ShowSuccessMesg,
-        setCallback : setCallback
+        SetCallback : SetCallback,
+        Reload : Reload
     };
     
 }());

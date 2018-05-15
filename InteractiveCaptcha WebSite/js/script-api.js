@@ -3,7 +3,7 @@ $(document).ready(function () {
     // $("#icConfirm").click(function () {
     //     interactive_captcha.CheckResultCustom(CheckResult_Success, CheckResult_Error);
     // });
-    interactive_captcha.setCallback(test);
+    interactive_captcha.SetCallback(test);
 });
 
 function CheckResult_Success(data){
