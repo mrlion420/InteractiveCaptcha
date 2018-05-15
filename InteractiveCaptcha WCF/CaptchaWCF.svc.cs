@@ -133,62 +133,69 @@ namespace Interactive_Captcha
         {
             bool result = false;
             CaptchaAttributes captchaAttributes = new CaptchaAttributes();
-            captchaAttributes = captchaAttributes.GetCaptchaAttribute_ById(captchaId);
+            CaptchaSession captchaSession = new CaptchaSession();
+            captchaSession = captchaSession.GetCaptchaSession(captchaId);
 
-            var singleImageString = dataString.Split(';');
-
-            for (int i = 0; i < singleImageString.Length; i++)
+            if (captchaSession.IsValid)
             {
-                // CODE OPTIMIZATION HERE
-                if (i == 0 && !String.IsNullOrWhiteSpace(singleImageString[i]) || result && !String.IsNullOrWhiteSpace(singleImageString[i]))
+                captchaAttributes = captchaAttributes.GetCaptchaAttribute_ById(captchaId);
+
+                var singleImageString = dataString.Split(';');
+
+                for (int i = 0; i < singleImageString.Length; i++)
                 {
-                    var imageKVP = singleImageString[i].Split('=');
-                    short currentDegree = Convert.ToInt16(imageKVP[1]);
-                    switch (imageKVP[0])
+                    // CODE OPTIMIZATION HERE
+                    if (i == 0 && !String.IsNullOrWhiteSpace(singleImageString[i]) || result && !String.IsNullOrWhiteSpace(singleImageString[i]))
                     {
-                        case "captcha-1":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile1Angle);
-                            break;
+                        var imageKVP = singleImageString[i].Split('=');
+                        short currentDegree = Convert.ToInt16(imageKVP[1]);
+                        switch (imageKVP[0])
+                        {
+                            case "captcha-1":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile1Angle);
+                                break;
 
-                        case "captcha-2":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile2Angle);
-                            break;
+                            case "captcha-2":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile2Angle);
+                                break;
 
-                        case "captcha-3":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile3Angle);
-                            break;
+                            case "captcha-3":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile3Angle);
+                                break;
 
-                        case "captcha-4":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile4Angle);
-                            break;
+                            case "captcha-4":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile4Angle);
+                                break;
 
-                        case "captcha-5":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile5Angle);
-                            break;
+                            case "captcha-5":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile5Angle);
+                                break;
 
-                        case "captcha-6":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile6Angle);
-                            break;
+                            case "captcha-6":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile6Angle);
+                                break;
 
-                        case "captcha-7":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile7Angle);
-                            break;
+                            case "captcha-7":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile7Angle);
+                                break;
 
-                        case "captcha-8":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile8Angle);
-                            break;
+                            case "captcha-8":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile8Angle);
+                                break;
 
-                        case "captcha-9":
-                            result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile9Angle);
-                            break;
+                            case "captcha-9":
+                                result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile9Angle);
+                                break;
+                        }
                     }
+
                 }
-                
+
+                // Update the captcha to invalid regardless of result
+
+                captchaSession.UpdateIsValid(captchaId, false);
             }
 
-            // Update the captcha to invalid regardless of result
-            CaptchaSession captchaSession = new CaptchaSession();
-            captchaSession.UpdateIsValid(captchaId, false);
 
             return result;
         }
@@ -201,7 +208,7 @@ namespace Interactive_Captcha
             int totalCompletedTurns = currentDegree / 360; // Will only return int
             int degreeTurnedUnder360 = currentDegree - (360 * totalCompletedTurns);
             int finalDegree = degreeTurnedUnder360 + rotatedDegree;
-            if(rotatedDegree == 0)
+            if (rotatedDegree == 0)
             {
                 if (finalDegree == 0)
                 {
@@ -210,7 +217,7 @@ namespace Interactive_Captcha
             }
             else
             {
-                if(finalDegree == 360)
+                if (finalDegree == 360)
                 {
                     result = true;
                 }

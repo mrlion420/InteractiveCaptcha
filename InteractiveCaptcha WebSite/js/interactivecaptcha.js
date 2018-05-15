@@ -2,7 +2,7 @@ var interactive_captcha = (function(){
     var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
     var gCaptchaId = 0;
     var gRenderId = "";
-    var gCallback;
+    var gCallback = null;
     var gInitWithoutBtn = false;
 
     function ajaxGet(methodName, data, successCallBack, errorCallBack){
@@ -55,10 +55,10 @@ var interactive_captcha = (function(){
         gRenderId = renderId;
         // Generate the container first
         htmlString += "<div class='ic-container'>";
-        htmlString += "<h1>Captcha (Click to rotate)</h1>";
+        htmlString += "<h2>Captcha (Click to rotate)</h2>";
         htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
         htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
-                      "<p> class='ic-text'>Successful!</p></div>";
+                      "<p class='ic-text'>Successful!</p></div>";
         htmlString += "<div class='ic-textblock' id='icError'>" + 
                       "<p class='ic-text ic-error' id='icErrorText'>Please Try Again!</p></div>";
         htmlString += "<div class='ic-tile' id='icTile'>";
@@ -84,9 +84,10 @@ var interactive_captcha = (function(){
         let htmlString = "";
         // Generate the container first
         htmlString += "<div class='ic-container'>";
+        htmlString += "<h2>Captcha (Click to rotate)</h2>";
         htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
         htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
-                      "<p> class='ic-text'>Successful!</p></div>";
+                      "<p class='ic-text'>Successful!</p></div>";
         htmlString += "<div class='ic-textblock' id='icError'>" + 
                       "<p class='ic-text ic-error' id='icErrorText'>Please Try Again!</p></div>";
         htmlString += "<div class='ic-tile' id='icTile'>";
@@ -149,7 +150,7 @@ var interactive_captcha = (function(){
         ajaxPost(methodName, data, successCallBack, errorCallBack);
     };
 
-    var CheckResultDefault = function(resultCallback){
+    var CheckResultDefault = function(){
         let captchaImages = document.getElementsByClassName('captcha-image');
         let dataString = "";
         for(let i = 0; i < captchaImages.length; i++){
@@ -167,10 +168,12 @@ var interactive_captcha = (function(){
         if(data === true){
             ShowSuccessMesg();
         }else{
-            $("#captchaError").fadeIn(1000);
-            $(".tile").css("opacity", 0.3);
+            $("#icError").fadeIn(1000);
+            $(".ic-tile").css("opacity", 0.3);
         }
-        gCallback(data);
+        if(typeof gCallback === "function"){
+            gCallback(data);
+        }
     }
     
     function CheckResult_Error(data){

@@ -1,24 +1,38 @@
 $(document).ready(function () {
-    interactive_captcha.InitWithoutButton("here");
-    // $("#icConfirm").click(function () {
-    //     interactive_captcha.CheckResultCustom(CheckResult_Success, CheckResult_Error);
-    // });
-    interactive_captcha.SetCallback(test);
+    // DemoWithButton();
+    DemoWithoutButton();
 });
+
+// -------------------- DEMO WITHOUT BUTTON  ----------------------------
+function DemoWithoutButton(){
+    $("#btnSubmit").hide();
+    interactive_captcha.Init("test-container", callbackToClient);
+}
+
+function callbackToClient(data){
+    alert("Callback to client");
+}
+
+// -------------------- DEMO WITH BUTTON  ----------------------------
+function DemoWithButton(){
+    btnClickhandler();
+    interactive_captcha.InitWithoutButton("test-container");
+}
 
 function CheckResult_Success(data){
     if(data === true){
         interactive_captcha.ShowSuccessMesg();
     }else{
-        interactive_captcha.ShowErrorMesg("Wrong Captcha. Please click reload button");
-        // interactive_captcha.Reload();
+        interactive_captcha.ShowErrorMesg("Please try again!");
     }
 }
 
 function CheckResult_Error(data){
-
+    interactive_captcha.ShowErrorMesg("Error in loading captcha");
 }
 
-function test(data){
-    
+function btnClickhandler(){
+    $("#btnSubmit").click(function(){
+        interactive_captcha.CheckResultCustom(CheckResult_Success, CheckResult_Error);
+    });
 }
