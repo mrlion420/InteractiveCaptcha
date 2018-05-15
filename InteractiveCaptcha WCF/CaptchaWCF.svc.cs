@@ -185,6 +185,11 @@ namespace Interactive_Captcha
                 }
                 
             }
+
+            // Update the captcha to invalid regardless of result
+            CaptchaSession captchaSession = new CaptchaSession();
+            captchaSession.UpdateIsValid(captchaId, false);
+
             return result;
         }
 
