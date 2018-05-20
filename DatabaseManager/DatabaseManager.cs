@@ -26,7 +26,7 @@ namespace DatabaseManager
         }
         private void Initialize()
         {
-            server = "http://122.11.177.14:";
+            server = "localhost";
             database = "interactive_captcha";
             uid = "root";
             password = "toor";
