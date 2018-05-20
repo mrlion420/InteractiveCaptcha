@@ -144,14 +144,18 @@ namespace Interactive_Captcha
 
                 for (int i = 0; i < singleImageString.Length; i++)
                 {
+                    if (String.IsNullOrWhiteSpace(singleImageString[i]))
+                    {
+                        break;
+                    }
                     // CODE OPTIMIZATION HERE
-                    if (i == 0 && !String.IsNullOrWhiteSpace(singleImageString[i]) || result && !String.IsNullOrWhiteSpace(singleImageString[i]))
+                    if (i == 0 || result )
                     {
                         var imageKVP = singleImageString[i].Split('=');
                         short currentDegree = Convert.ToInt16(imageKVP[1]);
                         switch (imageKVP[0])
                         {
-                            case "captcha -1":
+                            case "captcha-1":
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile1Angle);
                                 break;
 

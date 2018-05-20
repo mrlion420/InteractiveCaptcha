@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // DemoWithButton();
-    DemoWithoutButton();
+    DemoWithButton();
 });
 
 // -------------------- DEMO WITHOUT BUTTON  ----------------------------
