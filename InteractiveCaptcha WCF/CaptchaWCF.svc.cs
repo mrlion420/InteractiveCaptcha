@@ -101,7 +101,7 @@ namespace Interactive_Captcha
                         imageDegreeLst.Add(rotationDegreeInt);
                         // Create imageURL image
                         ImageURL imageURL = new ImageURL();
-                        imageURL.URL = imageFilePath + fileName;
+                        imageURL.URL = @"http://122.11.177.14:9999/OutputImg/" + fileName;
                         imageURL.CaptchaId = captchaId;
                         lstImageURL.Add(imageURL);
                         currentImageCount++;
@@ -151,7 +151,7 @@ namespace Interactive_Captcha
                         short currentDegree = Convert.ToInt16(imageKVP[1]);
                         switch (imageKVP[0])
                         {
-                            case "captcha-1":
+                            case "captcha -1":
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile1Angle);
                                 break;
 

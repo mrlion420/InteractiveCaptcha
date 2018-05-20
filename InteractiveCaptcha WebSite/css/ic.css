@@ -58,6 +58,7 @@
     font-size: 15px;
     font-family: Arial;
     cursor: pointer;
+    padding: 0px;
 }
 
 .ic-button:hover {
@@ -129,8 +130,8 @@
   .lds-rolling div,
   .lds-rolling div:after {
     position: absolute;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border: 14px solid #1c4595;
     border-top-color: transparent;
     border-radius: 50%;

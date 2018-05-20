@@ -6,7 +6,7 @@ $(document).ready(function () {
 // -------------------- DEMO WITHOUT BUTTON  ----------------------------
 function DemoWithoutButton(){
     $("#btnSubmit").hide();
-    interactive_captcha.Init("test-container", callbackToClient);
+    interactive_captcha.InitWithoutButton("test-container");
 }
 
 function callbackToClient(data){
@@ -16,7 +16,7 @@ function callbackToClient(data){
 // -------------------- DEMO WITH BUTTON  ----------------------------
 function DemoWithButton(){
     btnClickhandler();
-    interactive_captcha.InitWithoutButton("test-container");
+    interactive_captcha.Init("test-container", callbackToClient);
 }
 
 function CheckResult_Success(data){
