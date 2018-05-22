@@ -22,12 +22,16 @@ namespace Interactive_Captcha
         // End of examples
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]
-        void GetCaptchaImages();
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool CheckResult(int captchaId, string dataString);
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json)]
-        bool CheckResult(long sessionId);
+        List<ImageURL> GetCaptcha();
+
+        [OperationContract]
+        [WebInvoke(Method = "OPTIONS", UriTemplate = "*")]
+        void GetOptions();
 
         // TODO: Add your service operations here
     }
@@ -53,5 +57,38 @@ namespace Interactive_Captcha
             get { return stringValue; }
             set { stringValue = value; }
         }
+    }
+
+
+    [DataContract]
+    public class ImageURL
+    {
+        private string url;
+        private double degree;
+        private int captchaId;
+
+        [DataMember]
+        public int CaptchaId
+        {
+            get { return captchaId; }
+            set { captchaId = value; }
+        }
+
+
+        [DataMember]
+        public double Degree
+        {
+            get { return degree; }
+            set { degree = value; }
+        }
+
+
+        [DataMember]
+        public string URL
+        {
+            get { return url; }
+            set { url = value; }
+        }
+
     }
 }

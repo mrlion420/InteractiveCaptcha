@@ -1,27 +1,67 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace DatabaseManager
 {
-    public class DatabaseManager
+   class DatabaseManager
     {
 
-        public SqlConnection CreateConnection()
-        {
-            // SAMPLE CODE
-            SqlConnection conn = new SqlConnection();
-            return conn;
-        }    
+        public MySqlConnection Connection { get; set; }
 
-        public void CloseConnection(SqlConnection conn)
+        private string server;
+        private string database;
+        private string uid;
+        private string password;
+
+        public DatabaseManager()
         {
-            conn.Close();
+            Initialize();
         }
-        
+        private void Initialize()
+        {
+            server = "localhost";
+            database = "interactive_captcha";
+            uid = "root";
+            password = "toor";
+            string connectionString;
+            connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+            Connection = new MySqlConnection(connectionString);
+        }
+
+        public bool OpenConnection()
+        {
+            try
+            {
+                Connection.Open();
+                return true;
+            }
+            catch(MySqlException ex)
+            {
+                return false;
+            }
+        }
+        public bool CloseConnection()
+        {
+            try
+            {
+                Connection.Close();
+                Connection.Dispose();
+                return true;
+            }
+            catch(MySqlException)
+            {
+                return false;
+            }
+        }
+
+
     }
 
     
