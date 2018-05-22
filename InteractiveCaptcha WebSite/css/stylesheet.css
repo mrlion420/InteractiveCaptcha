@@ -1,4 +1,5 @@
-﻿.row {
+﻿/*
+.row {
     display: flex;
     flex-wrap: wrap;
     width:330px;
@@ -6,7 +7,7 @@
     margin: 1px;
 }
 
-/*Create 3 equal columns that sits next to each other */
+
 .column {
     float: left;
 }
@@ -28,5 +29,5 @@
 }
 
 
-
+*/
 
