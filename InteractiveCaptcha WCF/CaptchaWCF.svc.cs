@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -19,6 +20,7 @@ namespace Interactive_Captcha
     public class CaptchaWCF : ICaptchaWCF
     {
         public string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+        public Random rnd = new Random();
 
         public string GetData(int value)
         {
@@ -96,8 +98,29 @@ namespace Interactive_Captcha
                             bmpCroppedImage.RotateFlip(rotationDegree);
                         }
 
+                        // Apply image filter
+                        Bitmap bmp32BppDest = new Bitmap(bmpCroppedImage.Width, bmpCroppedImage.Height, PixelFormat.Format32bppArgb);
+                        using (Graphics graphics = Graphics.FromImage(bmp32BppDest))
+                        {
+                            ImageAttributes bmpAttributes = new ImageAttributes();
+                            ColorMatrix colorMatrix = new ColorMatrix(new float[][] 
+                                                {
+                                                    new float[] {.3f, .3f, .3f, 0, 0},
+                                                    new float[] {.59f, .59f, .59f, 0, 0},
+                                                    new float[] {.11f, .11f, .11f, 0, 0},
+                                                    new float[] {0, 0, 0, 1, 0},
+                                                    new float[] {0, 0, 0, 0, 1}
+                                                });
+                            bmpAttributes.SetColorMatrix(colorMatrix);
+
+                            graphics.DrawImage(bmpCroppedImage, new Rectangle(0, 0, bmpCroppedImage.Width, bmpCroppedImage.Height),
+                                             0, 0, bmpCroppedImage.Width, bmpCroppedImage.Height, GraphicsUnit.Pixel, bmpAttributes);
+
+                        }
+
                         string fileName = captchaId + "-" + i + "-" + j + ".png";
-                        bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
+                        //bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
+                        bmp32BppDest.Save(currentDirectory + @"\OutputImg\" + fileName);
                         imageDegreeLst.Add(rotationDegreeInt);
                         // Create imageURL image
                         ImageURL imageURL = new ImageURL();
@@ -232,12 +255,11 @@ namespace Interactive_Captcha
         private HashSet<int> GetRandomExcludedNumbers()
         {
             HashSet<int> excludedNumbers = new HashSet<int>();
-            var rand = new Random();
 
             for (int i = 0; i < 3; i++)
             {
                 var range = Enumerable.Range(1, 9).Where(x => !excludedNumbers.Contains(x));
-                int index = rand.Next(0, 9 - excludedNumbers.Count);
+                int index = rnd.Next(0, 9 - excludedNumbers.Count);
                 excludedNumbers.Add(range.ElementAt(index));
             }
             return excludedNumbers;
@@ -245,8 +267,7 @@ namespace Interactive_Captcha
 
         private RotateFlipType GetRotationDegree(ref short rotationDegreeInt)
         {
-            Random random = new Random();
-            int rotateType = random.Next(1, 4);
+            int rotateType = rnd.Next(1, 4);
             RotateFlipType degree = RotateFlipType.RotateNoneFlipNone;
             switch (rotateType)
             {
@@ -273,10 +294,33 @@ namespace Interactive_Captcha
         {
             DirectoryInfo dirInfo = new DirectoryInfo(currentDirectory + @"\SourceImg\");
             int fileCount = dirInfo.EnumerateFiles("*.*", SearchOption.AllDirectories).Count();
-            Random rnd = new Random();
             int result = rnd.Next(1, fileCount + 1); // creates a number between 1 and 12
 
             return result.ToString();
+        }
+
+        private Bitmap ApplyRandomFilters(Bitmap sourceBitmap)
+        {
+            // Apply image filter
+            Bitmap resultBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height, PixelFormat.Format32bppArgb);
+            using (Graphics graphics = Graphics.FromImage(resultBitmap))
+            {
+                ImageAttributes bmpAttributes = new ImageAttributes();
+                ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                                    {
+                                                    new float[] {.3f, .3f, .3f, 0, 0},
+                                                    new float[] {.59f, .59f, .59f, 0, 0},
+                                                    new float[] {.11f, .11f, .11f, 0, 0},
+                                                    new float[] {0, 0, 0, 1, 0},
+                                                    new float[] {0, 0, 0, 0, 1}
+                                    });
+                bmpAttributes.SetColorMatrix(colorMatrix);
+
+                graphics.DrawImage(sourceBitmap, new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height),
+                                 0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, bmpAttributes);
+            }
+
+            return resultBitmap;
         }
 
         #endregion
