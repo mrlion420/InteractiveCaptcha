@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.ServiceModel;
@@ -97,30 +98,12 @@ namespace Interactive_Captcha
                             // Apply rotation
                             bmpCroppedImage.RotateFlip(rotationDegree);
                         }
-
                         // Apply image filter
-                        Bitmap bmp32BppDest = new Bitmap(bmpCroppedImage.Width, bmpCroppedImage.Height, PixelFormat.Format32bppArgb);
-                        using (Graphics graphics = Graphics.FromImage(bmp32BppDest))
-                        {
-                            ImageAttributes bmpAttributes = new ImageAttributes();
-                            ColorMatrix colorMatrix = new ColorMatrix(new float[][] 
-                                                {
-                                                    new float[] {.3f, .3f, .3f, 0, 0},
-                                                    new float[] {.59f, .59f, .59f, 0, 0},
-                                                    new float[] {.11f, .11f, .11f, 0, 0},
-                                                    new float[] {0, 0, 0, 1, 0},
-                                                    new float[] {0, 0, 0, 0, 1}
-                                                });
-                            bmpAttributes.SetColorMatrix(colorMatrix);
-
-                            graphics.DrawImage(bmpCroppedImage, new Rectangle(0, 0, bmpCroppedImage.Width, bmpCroppedImage.Height),
-                                             0, 0, bmpCroppedImage.Width, bmpCroppedImage.Height, GraphicsUnit.Pixel, bmpAttributes);
-
-                        }
+                        Bitmap resultBitmap = ApplyRandomFilters(bmpCroppedImage);
 
                         string fileName = captchaId + "-" + i + "-" + j + ".png";
                         //bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
-                        bmp32BppDest.Save(currentDirectory + @"\OutputImg\" + fileName);
+                        resultBitmap.Save(currentDirectory + @"\OutputImg\" + fileName);
                         imageDegreeLst.Add(rotationDegreeInt);
                         // Create imageURL image
                         ImageURL imageURL = new ImageURL();
@@ -293,8 +276,8 @@ namespace Interactive_Captcha
         private string GetRandomImageName()
         {
             DirectoryInfo dirInfo = new DirectoryInfo(currentDirectory + @"\SourceImg\");
-            int fileCount = dirInfo.EnumerateFiles("*.*", SearchOption.AllDirectories).Count();
-            int result = rnd.Next(1, fileCount + 1); // creates a number between 1 and 12
+            var fileArray = dirInfo.EnumerateFiles("*.*", SearchOption.AllDirectories).ToArray();
+            int result = rnd.Next(fileArray.Length); 
 
             return result.ToString();
         }
@@ -302,24 +285,91 @@ namespace Interactive_Captcha
         private Bitmap ApplyRandomFilters(Bitmap sourceBitmap)
         {
             // Apply image filter
-            Bitmap resultBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height, PixelFormat.Format32bppArgb);
-            using (Graphics graphics = Graphics.FromImage(resultBitmap))
+            int randomNumber = rnd.Next(1, 4);
+            Bitmap resultBitmap = null;
+            switch (randomNumber)
             {
-                ImageAttributes bmpAttributes = new ImageAttributes();
-                ColorMatrix colorMatrix = new ColorMatrix(new float[][]
-                                    {
-                                                    new float[] {.3f, .3f, .3f, 0, 0},
-                                                    new float[] {.59f, .59f, .59f, 0, 0},
-                                                    new float[] {.11f, .11f, .11f, 0, 0},
-                                                    new float[] {0, 0, 0, 1, 0},
-                                                    new float[] {0, 0, 0, 0, 1}
-                                    });
-                bmpAttributes.SetColorMatrix(colorMatrix);
+                case 1:
+                    resultBitmap = ApplyColorTint(sourceBitmap, 0, 0.15F, 0);
+                    break;
+                case 2:
+                    resultBitmap = ApplyColorTint(sourceBitmap, 0.15F, 0, 0);
+                    break;
 
-                graphics.DrawImage(sourceBitmap, new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height),
-                                 0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, bmpAttributes);
+                case 3:
+                    resultBitmap = ApplyColorTint(sourceBitmap, 0, 0, 0.15F);
+                    break;
             }
+            
+            //Bitmap resultBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height, PixelFormat.Format32bppArgb);
+            //using (Graphics graphics = Graphics.FromImage(resultBitmap))
+            //{
+            //    ImageAttributes bmpAttributes = new ImageAttributes();
+            //    ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+            //                        {
+            //                                        new float[] {.3f, .3f, .3f, 0, 0},
+            //                                        new float[] {.59f, .59f, .59f, 0, 0},
+            //                                        new float[] {.11f, .11f, .11f, 0, 0},
+            //                                        new float[] {0, 0, 0, 1, 0},
+            //                                        new float[] {0, 0, 0, 0, 1}
+            //                        });
+            //    bmpAttributes.SetColorMatrix(colorMatrix);
 
+            //    graphics.DrawImage(sourceBitmap, new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height),
+            //                     0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, bmpAttributes);
+            //}
+
+            return resultBitmap;
+        }
+
+        private Bitmap ApplyColorTint(Bitmap sourceBitmap, float redTint, float blueTint, float greenTint)
+        {
+            BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0,
+                           sourceBitmap.Width, sourceBitmap.Height),
+                           ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            byte[] pixelBuffer = new byte[sourceData.Stride * sourceData.Height];
+
+            Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            sourceBitmap.UnlockBits(sourceData);
+
+            float blue = 0;
+            float green = 0;
+            float red = 0;
+
+
+            for (int k = 0; k + 4 < pixelBuffer.Length; k += 4)
+            {
+                blue = pixelBuffer[k] + (255 - pixelBuffer[k]) * blueTint;
+                green = pixelBuffer[k + 1] + (255 - pixelBuffer[k + 1]) * greenTint;
+                red = pixelBuffer[k + 2] + (255 - pixelBuffer[k + 2]) * redTint;
+
+
+                if (blue > 255)
+                { blue = 255; }
+
+
+                if (green > 255)
+                { green = 255; }
+
+
+                if (red > 255)
+                { red = 255; }
+
+
+                pixelBuffer[k] = (byte)blue;
+                pixelBuffer[k + 1] = (byte)green;
+                pixelBuffer[k + 2] = (byte)red;
+
+
+            }
+            Bitmap resultBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height);
+            BitmapData resultData = resultBitmap.LockBits(new Rectangle(0, 0,
+                                    resultBitmap.Width, resultBitmap.Height),
+                                    ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+            Marshal.Copy(pixelBuffer, 0, resultData.Scan0, pixelBuffer.Length);
+            resultBitmap.UnlockBits(resultData);
             return resultBitmap;
         }
 

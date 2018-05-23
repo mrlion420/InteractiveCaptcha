@@ -1,6 +1,6 @@
 var interactive_captcha = (function(){
-     var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
-    //var gWebServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
+    //  var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
+    var gWebServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
     var gCaptchaId = 0;
     var gRenderId = "";
     var gCallback = null;
