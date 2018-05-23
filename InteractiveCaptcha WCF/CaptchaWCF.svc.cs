@@ -23,24 +23,6 @@ namespace Interactive_Captcha
         public string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
         public Random rnd = new Random();
 
-        public string GetData(int value)
-        {
-            return string.Format("You entered: {0}", value);
-        }
-
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
-        {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
-        }
-
         public void GetOptions()
         {
         }
@@ -138,6 +120,7 @@ namespace Interactive_Captcha
         public bool CheckResult(int captchaId, string dataString)
         {
             bool result = false;
+            int totalCaptchaTileCount = 0;
             CaptchaAttributes captchaAttributes = new CaptchaAttributes();
             CaptchaSession captchaSession = new CaptchaSession();
             captchaSession = captchaSession.GetCaptchaSession(captchaId);
@@ -147,7 +130,7 @@ namespace Interactive_Captcha
                 captchaAttributes = captchaAttributes.GetCaptchaAttribute_ById(captchaId);
 
                 var singleImageString = dataString.Split(';');
-
+                
                 for (int i = 0; i < singleImageString.Length; i++)
                 {
                     if (String.IsNullOrWhiteSpace(singleImageString[i]))
@@ -162,38 +145,47 @@ namespace Interactive_Captcha
                         switch (imageKVP[0])
                         {
                             case "captcha-1":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile1Angle);
                                 break;
 
                             case "captcha-2":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile2Angle);
                                 break;
 
                             case "captcha-3":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile3Angle);
                                 break;
 
                             case "captcha-4":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile4Angle);
                                 break;
 
                             case "captcha-5":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile5Angle);
                                 break;
 
                             case "captcha-6":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile6Angle);
                                 break;
 
                             case "captcha-7":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile7Angle);
                                 break;
 
                             case "captcha-8":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile8Angle);
                                 break;
 
                             case "captcha-9":
+                                totalCaptchaTileCount++;
                                 result = isImageDegreeCorrect(currentDegree, captchaAttributes.Tile9Angle);
                                 break;
                         }
@@ -207,6 +199,11 @@ namespace Interactive_Captcha
                 DeleteCaptchaImage(captchaId);
             }
 
+            // If all 9 captcha tiles has not been verified
+            if(totalCaptchaTileCount != 9)
+            {
+                result = false;
+            }
 
             return result;
         }
