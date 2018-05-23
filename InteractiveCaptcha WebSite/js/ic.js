@@ -72,10 +72,10 @@ var interactive_captcha = (function(){
         htmlString += "<div class='ic-container'>";
         htmlString += "<h2 id='icTitle'>" + gLocale.chartTitle + "</h2>";
         htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
-        htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
+        htmlString += "<div class='ic-textblock' id='icSuccessTxt'>" + 
                       "<p class='ic-text' id='icSuccessTxt'>" + gLocale.successTxt + "</p></div>";
         htmlString += "<div class='ic-textblock' id='icError'>" + 
-                      "<p class='ic-text ic-error' id='icErrorText'>" + gLocale.errorTxt + "</p></div>";
+                      "<p class='ic-text ic-error' id='icErrorTxt'>" + gLocale.errorTxt + "</p></div>";
         htmlString += "<div class='ic-tile' id='icTile'>";
         htmlString += "</div>";
         htmlString += "<button class='ic-button' id='icConfirm'>" + gLocale.confirmBtnTxt + "</button>";
@@ -106,7 +106,7 @@ var interactive_captcha = (function(){
         htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
                       "<p class='ic-text' id='icSuccessTxt'>" + gLocale.successTxt + "</p></div>";
         htmlString += "<div class='ic-textblock' id='icError'>" + 
-                      "<p class='ic-text ic-error' id='icErrorText'>" + gLocale.errorTxt + "</p></div>";
+                      "<p class='ic-text ic-error' id='icErrorTxt'>" + gLocale.errorTxt + "</p></div>";
         htmlString += "<div class='ic-tile' id='icTile'>";
         htmlString += "</div>";
         htmlString += "<button class='ic-button' id='icReload'>" + gLocale.reloadBtnTxt + "</button>";
@@ -126,7 +126,7 @@ var interactive_captcha = (function(){
         $.each(languageObj, function(key,value){
             gLocaleList[key] = value;
         });
-    }
+    };
 
     var SetCurrentLocale = function(locale, reloadText){
         gLocale = gLocaleList[locale];
@@ -137,7 +137,7 @@ var interactive_captcha = (function(){
             $("#icConfirm").html(gLocale.confirmBtnTxt);
             $("#icReload").html(gLocale.reloadBtnTxt);
         }
-    }
+    };
 
     function GetCaptcha_Success(data){
         let htmlString = "";
