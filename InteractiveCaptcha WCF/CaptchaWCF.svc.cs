@@ -52,7 +52,7 @@ namespace Interactive_Captcha
             string imageFilePath = currentDirectory + @"\OutputImg\";
             string imageName = GetRandomImageName();
 
-            Image img = Image.FromFile(currentDirectory + @"\SourceImg\" + imageName + ".jpg");
+            Image img = Image.FromFile(currentDirectory + @"\SourceImg\" + imageName);
             Bitmap bmpImg = new Bitmap(img);
             int width = bmpImg.Width;
             int height = bmpImg.Height;
@@ -155,7 +155,7 @@ namespace Interactive_Captcha
                         break;
                     }
                     // CODE OPTIMIZATION HERE
-                    if (i == 0 || result )
+                    if (i == 0 || result)
                     {
                         var imageKVP = singleImageString[i].Split('=');
                         short currentDegree = Convert.ToInt16(imageKVP[1]);
@@ -204,6 +204,7 @@ namespace Interactive_Captcha
                 // Update the captcha to invalid regardless of result
 
                 captchaSession.UpdateIsValid(captchaId, false);
+                DeleteCaptchaImage(captchaId);
             }
 
 
@@ -277,9 +278,9 @@ namespace Interactive_Captcha
         {
             DirectoryInfo dirInfo = new DirectoryInfo(currentDirectory + @"\SourceImg\");
             var fileArray = dirInfo.EnumerateFiles("*.*", SearchOption.AllDirectories).ToArray();
-            int result = rnd.Next(fileArray.Length); 
+            string fileName = fileArray[rnd.Next(fileArray.Length)].Name;
 
-            return result.ToString();
+            return fileName;
         }
 
         private Bitmap ApplyRandomFilters(Bitmap sourceBitmap)
@@ -300,7 +301,7 @@ namespace Interactive_Captcha
                     resultBitmap = ApplyColorTint(sourceBitmap, 0, 0, 0.15F);
                     break;
             }
-            
+
             //Bitmap resultBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height, PixelFormat.Format32bppArgb);
             //using (Graphics graphics = Graphics.FromImage(resultBitmap))
             //{
@@ -371,6 +372,22 @@ namespace Interactive_Captcha
             Marshal.Copy(pixelBuffer, 0, resultData.Scan0, pixelBuffer.Length);
             resultBitmap.UnlockBits(resultData);
             return resultBitmap;
+        }
+
+        private void DeleteCaptchaImage(int captchaId)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    string fileName = currentDirectory + @"\OutputImg\" + captchaId + "-" + i + "-" + j + ".png";
+                    if (File.Exists(fileName))
+                    {
+                        File.Delete(fileName);
+                    }
+
+                }
+            }
         }
 
         #endregion
