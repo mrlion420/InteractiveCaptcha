@@ -50,8 +50,10 @@ namespace Interactive_Captcha
 
             HashSet<int> excludedNumbers = GetRandomExcludedNumbers();
 
-            CaptchaSession captchaSession = new CaptchaSession();
-            captchaSession.ImageName = imageName;
+            CaptchaSession captchaSession = new CaptchaSession
+            {
+                ImageName = imageName
+            };
 
             if (captchaSession.Insert(ref captchaId))
             {
@@ -88,25 +90,29 @@ namespace Interactive_Captcha
                         resultBitmap.Save(currentDirectory + @"\OutputImg\" + fileName);
                         imageDegreeLst.Add(rotationDegreeInt);
                         // Create imageURL image
-                        ImageURL imageURL = new ImageURL();
-                        imageURL.URL = @"http://122.11.177.14:9999/OutputImg/" + fileName;
-                        imageURL.CaptchaId = captchaId;
+                        ImageURL imageURL = new ImageURL
+                        {
+                            URL = @"http://fmcc.aquametro.com.sg/ic/OutputImg/" + fileName,
+                            CaptchaId = captchaId
+                        };
                         lstImageURL.Add(imageURL);
                         currentImageCount++;
                     }
                 }
 
-                CaptchaAttributes captchaAttri = new CaptchaAttributes();
-                captchaAttri.CaptchaID = captchaId;
-                captchaAttri.Tile1Angle = imageDegreeLst[0];
-                captchaAttri.Tile2Angle = imageDegreeLst[1];
-                captchaAttri.Tile3Angle = imageDegreeLst[2];
-                captchaAttri.Tile4Angle = imageDegreeLst[3];
-                captchaAttri.Tile5Angle = imageDegreeLst[4];
-                captchaAttri.Tile6Angle = imageDegreeLst[5];
-                captchaAttri.Tile7Angle = imageDegreeLst[6];
-                captchaAttri.Tile8Angle = imageDegreeLst[7];
-                captchaAttri.Tile9Angle = imageDegreeLst[8];
+                CaptchaAttributes captchaAttri = new CaptchaAttributes
+                {
+                    CaptchaID = captchaId,
+                    Tile1Angle = imageDegreeLst[0],
+                    Tile2Angle = imageDegreeLst[1],
+                    Tile3Angle = imageDegreeLst[2],
+                    Tile4Angle = imageDegreeLst[3],
+                    Tile5Angle = imageDegreeLst[4],
+                    Tile6Angle = imageDegreeLst[5],
+                    Tile7Angle = imageDegreeLst[6],
+                    Tile8Angle = imageDegreeLst[7],
+                    Tile9Angle = imageDegreeLst[8]
+                };
 
                 if (!captchaAttri.Insert())
                 {
@@ -194,7 +200,6 @@ namespace Interactive_Captcha
                 }
 
                 // Update the captcha to invalid regardless of result
-
                 captchaSession.UpdateIsValid(captchaId, false);
                 DeleteCaptchaImage(captchaId);
             }

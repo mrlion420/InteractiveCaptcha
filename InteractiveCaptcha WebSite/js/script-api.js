@@ -1,7 +1,31 @@
 $(document).ready(function () {
     // DemoWithButton();
+    AddNewLocale();
     DemoWithButton();
 });
+
+// -------------------- LOCALISATION DEMO  ----------------------------
+function AddNewLocale(){
+    let newLocale = { 
+        "zh" : {
+            chartTitle: "Chart Title Chinese",
+            confirmBtnTxt : "Chinese",
+            reloadBtnTxt: "Chinese",
+            successTxt: "Chinese",
+            errorTxt: "Chinese"
+        },
+        "fr": {
+            chartTitle : "French",
+            confirmBtnTxt : "French",
+            reloadBtnTxt: "French",
+            successTxt: "French",
+            errorTxt: "French"
+        }
+    };
+
+    interactive_captcha.AddNewLocale(newLocale);
+    interactive_captcha.SetCurrentLocale("zh", true);
+}
 
 // -------------------- DEMO WITHOUT BUTTON  ----------------------------
 function DemoWithoutButton(){
@@ -10,7 +34,7 @@ function DemoWithoutButton(){
 }
 
 function callbackToClient(data){
-    alert("Callback to client");
+    console.log("Check Result Callback");
 }
 
 // -------------------- DEMO WITH BUTTON  ----------------------------

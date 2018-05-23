@@ -202,22 +202,31 @@ namespace DatabaseManager
         public bool Insert(ref int captchaId)
         {
             bool result = false;
-            string queryString = "INSERT INTO captcha_session(ImageName) values (@imageName); SELECT LAST_INSERT_ID();";
-            if (database.OpenConnection())
+            try
             {
-                MySqlCommand cmd = new MySqlCommand(queryString, database.Connection);
-                cmd.Parameters.AddWithValue("@imageName", ImageName);
-                cmd.CommandType = System.Data.CommandType.Text;
-                var obj = cmd.ExecuteScalar();
-                if(obj != null)
-                {
-                    captchaId = Convert.ToInt32(obj);
-                }
-                result = true;
                 
-                database.CloseConnection();
+                string queryString = "INSERT INTO captcha_session(ImageName) values (@imageName); SELECT LAST_INSERT_ID();";
+                if (database.OpenConnection())
+                {
+                    MySqlCommand cmd = new MySqlCommand(queryString, database.Connection);
+                    cmd.Parameters.AddWithValue("@imageName", ImageName);
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    var obj = cmd.ExecuteScalar();
+                    if (obj != null)
+                    {
+                        captchaId = Convert.ToInt32(obj);
+                    }
+                    result = true;
+
+                    database.CloseConnection();
+
+                }
+            }
+            catch(Exception ex)
+            {
 
             }
+            
             return result;
         }
 

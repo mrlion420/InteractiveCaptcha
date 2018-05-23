@@ -1,6 +1,20 @@
 var interactive_captcha = (function(){
     //  var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
-    var gWebServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
+    // var gWebServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
+    var gWebServiceHost = "http://fmcc.aquametro.com.sg/ic/CaptchaWCF.svc";
+    
+    var gLocaleList = {
+        "en":{
+            chartTitle: "Captcha (Click To Rotate)",
+            confirmBtnTxt : "Confirm",
+            reloadBtnTxt: "Reload",
+            successTxt: "Successful!",
+            errorTxt: "Please try again!"
+        }
+    }
+
+    var gLocale = gLocaleList.en;
+    
     var gCaptchaId = 0;
     var gRenderId = "";
     var gCallback = null;
@@ -56,16 +70,16 @@ var interactive_captcha = (function(){
         gRenderId = renderId;
         // Generate the container first
         htmlString += "<div class='ic-container'>";
-        htmlString += "<h2>Captcha (Click to rotate)</h2>";
+        htmlString += "<h2 id='icTitle'>" + gLocale.chartTitle + "</h2>";
         htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
         htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
-                      "<p class='ic-text'>Successful!</p></div>";
+                      "<p class='ic-text' id='icSuccessTxt'>" + gLocale.successTxt + "</p></div>";
         htmlString += "<div class='ic-textblock' id='icError'>" + 
-                      "<p class='ic-text ic-error' id='icErrorText'>Please Try Again!</p></div>";
+                      "<p class='ic-text ic-error' id='icErrorText'>" + gLocale.errorTxt + "</p></div>";
         htmlString += "<div class='ic-tile' id='icTile'>";
         htmlString += "</div>";
-        htmlString += "<button class='ic-button' id='icConfirm'>Confirm</button>";
-        htmlString += "<button class='ic-button' id='icReload'>↻</button>";
+        htmlString += "<button class='ic-button' id='icConfirm'>" + gLocale.confirmBtnTxt + "</button>";
+        htmlString += "<button class='ic-button' id='icReload'>" + gLocale.reloadBtnTxt + "</button>";
         htmlString += "</div>";
         $("#" + gRenderId).html(htmlString);
         ShowLoadingIcon();
@@ -87,15 +101,15 @@ var interactive_captcha = (function(){
         let htmlString = "";
         // Generate the container first
         htmlString += "<div class='ic-container'>";
-        htmlString += "<h2>Captcha (Click to rotate)</h2>";
+        htmlString += "<h2 id='icTitle'>" + gLocale.chartTitle + "</h2>";
         htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
         htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
-                      "<p class='ic-text'>Successful!</p></div>";
+                      "<p class='ic-text' id='icSuccessTxt'>" + gLocale.successTxt + "</p></div>";
         htmlString += "<div class='ic-textblock' id='icError'>" + 
-                      "<p class='ic-text ic-error' id='icErrorText'>Please Try Again!</p></div>";
+                      "<p class='ic-text ic-error' id='icErrorText'>" + gLocale.errorTxt + "</p></div>";
         htmlString += "<div class='ic-tile' id='icTile'>";
         htmlString += "</div>";
-        htmlString += "<button class='ic-button' id='icReload'>↻</button>";
+        htmlString += "<button class='ic-button' id='icReload'>" + gLocale.reloadBtnTxt + "</button>";
         htmlString += "</div>";
         $("#" + gRenderId).html(htmlString);
         ShowLoadingIcon();
@@ -107,6 +121,23 @@ var interactive_captcha = (function(){
             ShowErrorMesg("An error has occurred");
         }
     };
+
+    var AddNewLocale = function(languageObj){
+        $.each(languageObj, function(key,value){
+            gLocaleList[key] = value;
+        });
+    }
+
+    var SetCurrentLocale = function(locale, reloadText){
+        gLocale = gLocaleList[locale];
+        if(reloadText){
+            $("#icTitle").html(gLocale.chartTitle);
+            $("#icSuccessTxt").html(gLocale.successTxt);
+            $("#icErrorTxt").html(gLocale.errorTxt);
+            $("#icConfirm").html(gLocale.confirmBtnTxt);
+            $("#icReload").html(gLocale.reloadBtnTxt);
+        }
+    }
 
     function GetCaptcha_Success(data){
         let htmlString = "";
@@ -212,15 +243,75 @@ var interactive_captcha = (function(){
         }
     };
 
+    var Config = function(data){
+        $.each(data, function(key,value){
+            switch(key){
+                case "ColorConfirmBtn" : 
+                $("#icConfirm").css("background-color", value);
+                break;
+
+                case "ColorReloadBtn":
+                $("#icReload").css("background-color", value);
+                break;
+
+                case "ColorConfirmBtnTxt":
+                $("#icConfirm").css("color", value);
+                break;
+
+                case "ColorReloadBtnTxt":
+                $("#icReload").css("color", value);
+                break;
+
+                case "ColorConfirmBtnBorder":
+                $("#icConfirm").css("border-color", value);
+                break;
+
+                case "ColorReloadBtnBorder":
+                $("#icReload").css("border-color", value);
+                break;
+
+                case "ColorCaptchaBackground":
+                $(".ic-container").css("background-color", value);
+                break;
+
+                case "ColorCaptchaTitle":
+                $("#icTitle").css("color", value);
+                break;
+
+                case "ShowCaptchaTitle":
+                if(value){
+                    $("#icTitle").css("display", "block");
+                }else{
+                    $("#icTitle").css("display", "none");
+                }
+                break;
+
+                case "ConfirmBtnBorder":
+                $("#icConfirm").css("border", value);
+                break;
+
+                case "ReloadBtnBorder":
+                $("#icReload").css("border", value);
+                break;
+
+                case "OuterBoxShadow":
+                $(".ic-container").css("box-shadow", value);
+                break;
+            }
+        });
+    };
+
     return {
         Init : Init,
         InitWithoutButton : InitWithoutButton,
-        CheckResultCustom : CheckResultCustom,
-        CheckResultDefault : CheckResultDefault,
+        CheckResultCustom : CheckResultCustom,        
         ShowErrorMesg : ShowErrorMesg,
         ShowSuccessMesg : ShowSuccessMesg,
         SetCallback : SetCallback,
-        Reload : Reload
+        Reload : Reload,
+        Config : Config,
+        SetCurrentLocale : SetCurrentLocale,
+        AddNewLocale : AddNewLocale
     };
     
 }());
