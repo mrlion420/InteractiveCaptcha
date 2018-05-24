@@ -73,7 +73,7 @@ namespace Interactive_Captcha
                         }
                         Rectangle cropArea = new Rectangle(currentX, currentY, widthCropSize, heightCropSize);
                         //cropArea.Intersect(new Rectangle(0, 0, bmpImg.Width, bmpImg.Height));
-                        Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, System.Drawing.Imaging.PixelFormat.DontCare);
+                        Bitmap bmpCroppedImage = bmpImg.Clone(cropArea, PixelFormat.DontCare);
                         short rotationDegreeInt = 0;
                         // Check if the current image is excluded from rotating or not 
                         if (!excludedNumbers.Contains(currentImageCount))
@@ -87,12 +87,20 @@ namespace Interactive_Captcha
 
                         string fileName = captchaId + "-" + i + "-" + j + ".png";
                         //bmpCroppedImage.Save(currentDirectory + @"\OutputImg\" + fileName);
-                        resultBitmap.Save(currentDirectory + @"\OutputImg\" + fileName);
+                        //resultBitmap.Save(currentDirectory + @"\OutputImg\" + fileName);
+                        string base64String = string.Empty;
+                        using(MemoryStream stream = new MemoryStream())
+                        {
+                            resultBitmap.Save(stream, ImageFormat.Bmp);
+                            base64String = Convert.ToBase64String(stream.ToArray());
+                        }
+                                                
                         imageDegreeLst.Add(rotationDegreeInt);
                         // Create imageURL image
                         ImageURL imageURL = new ImageURL
                         {
-                            URL = @"http://fmcc.aquametro.com.sg/ic/OutputImg/" + fileName,
+                            //URL = @"http://fmcc.aquametro.com.sg/ic/OutputImg/" + fileName,
+                            Base64String = base64String,
                             CaptchaId = captchaId
                         };
                         lstImageURL.Add(imageURL);

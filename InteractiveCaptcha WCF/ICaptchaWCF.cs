@@ -40,7 +40,7 @@ namespace Interactive_Captcha
 
 
         [DataMember]
-        public string URL { get; set; }
+        public string Base64String { get; set; }
 
     }
 }

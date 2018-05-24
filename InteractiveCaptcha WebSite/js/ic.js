@@ -1,7 +1,7 @@
 var interactive_captcha = (function(){
     //  var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
-    // var gWebServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
-    var gWebServiceHost = "http://fmcc.aquametro.com.sg/ic/CaptchaWCF.svc";
+    var gWebServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
+    // var gWebServiceHost = "http://fmcc.aquametro.com.sg/ic/CaptchaWCF.svc";
     
     var gLocaleList = {
         "en":{
@@ -150,7 +150,7 @@ var interactive_captcha = (function(){
                 htmlString += "<div class='ic-table'>";
             }
             htmlString += "<div class='ic-cell'>";
-            htmlString += "<img class='ic-bigOnHover imageclick captcha-image' id='captcha-" + currentCount + "' src='" + value.URL + "' data-degree='0'/>";
+            htmlString += "<img class='ic-bigOnHover imageclick captcha-image' id='captcha-" + currentCount + "' src='data:image/png;base64," + value.Base64String + "' data-degree='0'/>";
             htmlString += "</div>";
             count++;
             if(count % 3 === 0){
