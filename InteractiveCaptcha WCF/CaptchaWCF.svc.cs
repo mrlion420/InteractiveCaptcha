@@ -209,7 +209,7 @@ namespace Interactive_Captcha
 
                 // Update the captcha to invalid regardless of result
                 captchaSession.UpdateIsValid(captchaId, false);
-                DeleteCaptchaImage(captchaId);
+                //DeleteCaptchaImage(captchaId);
             }
 
             // If all 9 captcha tiles has not been verified
