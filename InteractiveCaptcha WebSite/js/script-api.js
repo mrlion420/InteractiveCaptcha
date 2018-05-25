@@ -2,7 +2,28 @@ $(document).ready(function () {
     // DemoWithButton();
     AddNewLocale();
     DemoWithButton();
+    ChangeConfig();
 });
+
+// -------------------- CONFIG DEMO  ----------------------------
+
+function ChangeConfig(){
+    let data = {
+        ColorConfirmBtn : "black",
+        ColorReloadBtn : "black",
+        ColorConfirmBtnTxt : "red",
+        ColorReloadBtnTxt : "red",
+        ColorConfirmBtnBorder: "yellow",
+        ColorReloadBtnBorder : "yellow",
+        ColorCaptchaBackground : "lightgrey",
+        ColorCaptchaTitle : "red",
+        ShowCaptchaTitle : false,
+        ConfirmBtnBorder : "4px solid yellow",
+        ReloadBtnBorder : "4px solid",
+        OuterBoxShadow : "2px 2px 2px 2px blue"
+    };
+    interactive_captcha.Config(data);
+}
 
 // -------------------- LOCALISATION DEMO  ----------------------------
 function AddNewLocale(){

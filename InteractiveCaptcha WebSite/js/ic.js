@@ -1,7 +1,7 @@
 var interactive_captcha = (function(){
     //  var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
-    var gWebServiceHost = "http://122.11.177.14:9999/CaptchaWCF.svc";
-    // var gWebServiceHost = "http://fmcc.aquametro.com.sg/ic/CaptchaWCF.svc";
+    // var gWebServiceHost = "http://122.11.177.14/IC/CaptchaWCF.svc";
+    var gWebServiceHost = "http://fmcc.aquametro.com.sg/ic/CaptchaWCF.svc";
     
     var gLocaleList = {
         "en":{
@@ -236,11 +236,10 @@ var interactive_captcha = (function(){
     };
 
     var Reload = function(){
-        if(gInitWithoutBtn){
-            InitWithoutButton(gRenderId);
-        }else{
-            Init(gRenderId);
-        }
+        $("#icTile").html("");
+        ShowLoadingIcon();
+        let methodName = "GetCaptcha";
+        ajaxGet(methodName, null, GetCaptcha_Success, GetCaptcha_Error);
     };
 
     var Config = function(data){
