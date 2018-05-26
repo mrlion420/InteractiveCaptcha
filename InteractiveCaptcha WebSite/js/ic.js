@@ -11,8 +11,9 @@ var interactive_captcha = (function(){
             successTxt: "Successful!",
             errorTxt: "Please try again!"
         }
-    }
+    };
 
+    // Default Language is English
     var gLocale = gLocaleList.en;
     
     var gCaptchaId = 0;
@@ -22,7 +23,7 @@ var interactive_captcha = (function(){
 
     function ajaxGet(methodName, data, successCallBack, errorCallBack){
         let url = gWebServiceHost + "/" + methodName;
-        return $.ajax({
+        $.ajax({
             type: 'GET',
             url: url,
             data: data,
@@ -34,7 +35,7 @@ var interactive_captcha = (function(){
     
     function ajaxPost(methodName, data, successCallBack, errorCallBack){
         let url = gWebServiceHost + "/" + methodName;
-        return $.ajax({
+        $.ajax({
             type: 'POST',
             url: url,
             data: JSON.stringify(data),

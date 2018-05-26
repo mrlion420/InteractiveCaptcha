@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    // DemoWithButton();
-    AddNewLocale();
     DemoWithButton();
-    ChangeConfig();
+    // AddNewLocale();
+    // DemoWithButton();
+    // ChangeConfig();
 });
 
 // -------------------- CONFIG DEMO  ----------------------------
@@ -50,18 +50,9 @@ function AddNewLocale(){
 
 // -------------------- DEMO WITHOUT BUTTON  ----------------------------
 function DemoWithoutButton(){
+    btnClickhandler();
     $("#btnSubmit").hide();
     interactive_captcha.InitWithoutButton("test-container");
-}
-
-function callbackToClient(data){
-    console.log("Check Result Callback");
-}
-
-// -------------------- DEMO WITH BUTTON  ----------------------------
-function DemoWithButton(){
-    btnClickhandler();
-    interactive_captcha.Init("test-container", callbackToClient);
 }
 
 function CheckResult_Success(data){
@@ -80,4 +71,15 @@ function btnClickhandler(){
     $("#btnSubmit").click(function(){
         interactive_captcha.CheckResultCustom(CheckResult_Success, CheckResult_Error);
     });
+}
+
+// -------------------- DEMO WITH BUTTON  ----------------------------
+function DemoWithButton(){
+    interactive_captcha.Init("test-container", callbackToClient);
+}
+
+
+function callbackToClient(data){
+    console.log("Check Result Callback");
+    // alert("Callback to client");
 }
