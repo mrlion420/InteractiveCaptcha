@@ -73,7 +73,7 @@ var interactive_captcha = (function(){
         htmlString += "<div class='ic-container'>";
         htmlString += "<h2 id='icTitle'>" + gLocale.chartTitle + "</h2>";
         htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
-        htmlString += "<div class='ic-textblock' id='icSuccessTxt'>" + 
+        htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
                       "<p class='ic-text' id='icSuccessTxt'>" + gLocale.successTxt + "</p></div>";
         htmlString += "<div class='ic-textblock' id='icError'>" + 
                       "<p class='ic-text ic-error' id='icErrorTxt'>" + gLocale.errorTxt + "</p></div>";
