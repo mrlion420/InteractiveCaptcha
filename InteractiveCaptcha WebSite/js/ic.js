@@ -11,8 +11,9 @@ var interactive_captcha = (function(){
             successTxt: "Successful!",
             errorTxt: "Please try again!"
         }
-    }
+    };
 
+    // Default Language is English
     var gLocale = gLocaleList.en;
     
     var gCaptchaId = 0;
@@ -22,7 +23,7 @@ var interactive_captcha = (function(){
 
     function ajaxGet(methodName, data, successCallBack, errorCallBack){
         let url = gWebServiceHost + "/" + methodName;
-        return $.ajax({
+        $.ajax({
             type: 'GET',
             url: url,
             data: data,
@@ -34,7 +35,7 @@ var interactive_captcha = (function(){
     
     function ajaxPost(methodName, data, successCallBack, errorCallBack){
         let url = gWebServiceHost + "/" + methodName;
-        return $.ajax({
+        $.ajax({
             type: 'POST',
             url: url,
             data: JSON.stringify(data),
@@ -72,7 +73,7 @@ var interactive_captcha = (function(){
         htmlString += "<div class='ic-container'>";
         htmlString += "<h2 id='icTitle'>" + gLocale.chartTitle + "</h2>";
         htmlString += "<div class='lds-css ng-scope' id='icLoading'><div class='lds-rolling'><div></div></div></div>";
-        htmlString += "<div class='ic-textblock' id='icSuccessTxt'>" + 
+        htmlString += "<div class='ic-textblock' id='icSuccess'>" + 
                       "<p class='ic-text' id='icSuccessTxt'>" + gLocale.successTxt + "</p></div>";
         htmlString += "<div class='ic-textblock' id='icError'>" + 
                       "<p class='ic-text ic-error' id='icErrorTxt'>" + gLocale.errorTxt + "</p></div>";

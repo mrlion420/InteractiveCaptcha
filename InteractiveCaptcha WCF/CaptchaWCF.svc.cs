@@ -384,21 +384,6 @@ namespace Interactive_Captcha
             return resultBitmap;
         }
 
-        private void DeleteCaptchaImage(int captchaId)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    string fileName = currentDirectory + @"\OutputImg\" + captchaId + "-" + i + "-" + j + ".png";
-                    if (File.Exists(fileName))
-                    {
-                        File.Delete(fileName);
-                    }
-
-                }
-            }
-        }
 
         #endregion
     }
