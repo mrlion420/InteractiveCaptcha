@@ -5,14 +5,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Security.Cryptography;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
-using System.ServiceModel.Web;
-using System.Text;
 
 namespace Interactive_Captcha
 {
@@ -31,7 +26,6 @@ namespace Interactive_Captcha
 
         public List<ImageURL> GetCaptcha()
         {
-            ServicePointManager.DefaultConnectionLimit = int.MaxValue;
             List<ImageURL> lstImageURL = new List<ImageURL>();
 
             string imageFilePath = currentDirectory + @"\OutputImg\";
@@ -127,13 +121,14 @@ namespace Interactive_Captcha
 
                 if (!captchaAttri.Insert())
                 {
+                    
                     // Return empy list if insertion throws an error
                     return new List<ImageURL>();
                 }
             }
             
             excludedNumbers = null;
-            //GC.Collect();
+            GC.Collect();
             return lstImageURL;
         }
 
@@ -303,18 +298,19 @@ namespace Interactive_Captcha
         {
             // Apply image filter
             int randomNumber = rnd.Next(1, 4);
+            float randomPercent = (float)RandomNumberBetween(0.05, 0.20);
             Bitmap resultBitmap = null;
             switch (randomNumber)
             {
                 case 1:
-                    resultBitmap = ApplyColorTint(sourceBitmap, 0, 0.15F, 0);
+                    resultBitmap = ApplyColorTint(sourceBitmap, 0, randomPercent, 0);
                     break;
                 case 2:
-                    resultBitmap = ApplyColorTint(sourceBitmap, 0.15F, 0, 0);
+                    resultBitmap = ApplyColorTint(sourceBitmap, randomPercent, 0, 0);
                     break;
 
                 case 3:
-                    resultBitmap = ApplyColorTint(sourceBitmap, 0, 0, 0.15F);
+                    resultBitmap = ApplyColorTint(sourceBitmap, 0, 0, randomPercent);
                     break;
             }
 
@@ -388,6 +384,13 @@ namespace Interactive_Captcha
             Marshal.Copy(pixelBuffer, 0, resultData.Scan0, pixelBuffer.Length);
             resultBitmap.UnlockBits(resultData);
             return resultBitmap;
+        }
+
+        private double RandomNumberBetween(double minValue, double maxValue)
+        {
+            var next = rnd.NextDouble();
+
+            return minValue + (next * (maxValue - minValue));
         }
 
 

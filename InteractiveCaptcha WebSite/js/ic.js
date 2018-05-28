@@ -1,5 +1,5 @@
 var interactive_captcha = (function(){
-     //var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
+    //  var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
     // var gWebServiceHost = "http://122.11.177.14/IC/CaptchaWCF.svc";
      var gWebServiceHost = "http://fmcc.aquametro.com.sg/ic/CaptchaWCF.svc";
     

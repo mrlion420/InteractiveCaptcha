@@ -60,25 +60,27 @@ namespace DatabaseManager
 
             if (database.OpenConnection())
             {
-                MySqlCommand cmd = new MySqlCommand(query, database.Connection);
-                cmd.Parameters.AddWithValue("@captchaId", CaptchaID);
-                cmd.Parameters.AddWithValue("@tile1", Tile1Angle);
-                cmd.Parameters.AddWithValue("@tile2", Tile2Angle);
-                cmd.Parameters.AddWithValue("@tile3", Tile3Angle);
-                cmd.Parameters.AddWithValue("@tile4", Tile4Angle);
-                cmd.Parameters.AddWithValue("@tile5", Tile5Angle);
-                cmd.Parameters.AddWithValue("@tile6", Tile6Angle);
-                cmd.Parameters.AddWithValue("@tile7", Tile7Angle);
-                cmd.Parameters.AddWithValue("@tile8", Tile8Angle);
-                cmd.Parameters.AddWithValue("@tile9", Tile9Angle);
-
-                int numberOfRows = cmd.ExecuteNonQuery();
-                if(numberOfRows >= 1)
+                using (MySqlCommand cmd = new MySqlCommand(query, database.Connection))
                 {
-                    result = true;
+                    cmd.Parameters.AddWithValue("@captchaId", CaptchaID);
+                    cmd.Parameters.AddWithValue("@tile1", Tile1Angle);
+                    cmd.Parameters.AddWithValue("@tile2", Tile2Angle);
+                    cmd.Parameters.AddWithValue("@tile3", Tile3Angle);
+                    cmd.Parameters.AddWithValue("@tile4", Tile4Angle);
+                    cmd.Parameters.AddWithValue("@tile5", Tile5Angle);
+                    cmd.Parameters.AddWithValue("@tile6", Tile6Angle);
+                    cmd.Parameters.AddWithValue("@tile7", Tile7Angle);
+                    cmd.Parameters.AddWithValue("@tile8", Tile8Angle);
+                    cmd.Parameters.AddWithValue("@tile9", Tile9Angle);
+
+                    int numberOfRows = cmd.ExecuteNonQuery();
+                    if (numberOfRows >= 1)
+                    {
+                        result = true;
+                    }
                 }
-                database.CloseConnection();
             }
+            database.CloseConnection();
 
             return result;
         }
@@ -89,44 +91,49 @@ namespace DatabaseManager
             string query = "SELECT * FROM captcha_attributes WHERE captchaID = @captchaId";
             if (database.OpenConnection())
             {
-                MySqlCommand cmd = new MySqlCommand(query, database.Connection);
-                cmd.Parameters.AddWithValue("@captchaId", captchaId);
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-                while (dataReader.Read())
+                using (MySqlCommand cmd = new MySqlCommand(query, database.Connection))
                 {
-                    string tempHolder = dataReader["CaptchaId"].ToString();
-                    obj.CaptchaID = Convert.ToInt16(tempHolder);
+                    cmd.Parameters.AddWithValue("@captchaId", captchaId);
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            string tempHolder = dataReader["CaptchaId"].ToString();
+                            obj.CaptchaID = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["CaptchaAttributeId"].ToString();
-                    obj.CaptchaAttributeID = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["CaptchaAttributeId"].ToString();
+                            obj.CaptchaAttributeID = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile1Angle"].ToString();
-                    obj.Tile1Angle = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["Tile1Angle"].ToString();
+                            obj.Tile1Angle = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile2Angle"].ToString();
-                    obj.Tile2Angle = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["Tile2Angle"].ToString();
+                            obj.Tile2Angle = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile3Angle"].ToString();
-                    obj.Tile3Angle = Convert.ToInt16(tempHolder); 
+                            tempHolder = dataReader["Tile3Angle"].ToString();
+                            obj.Tile3Angle = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile4Angle"].ToString();
-                    obj.Tile4Angle = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["Tile4Angle"].ToString();
+                            obj.Tile4Angle = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile5Angle"].ToString();
-                    obj.Tile5Angle = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["Tile5Angle"].ToString();
+                            obj.Tile5Angle = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile6Angle"].ToString();
-                    obj.Tile6Angle = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["Tile6Angle"].ToString();
+                            obj.Tile6Angle = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile7Angle"].ToString();
-                    obj.Tile7Angle = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["Tile7Angle"].ToString();
+                            obj.Tile7Angle = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile8Angle"].ToString();
-                    obj.Tile8Angle = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["Tile8Angle"].ToString();
+                            obj.Tile8Angle = Convert.ToInt16(tempHolder);
 
-                    tempHolder = dataReader["Tile9Angle"].ToString();
-                    obj.Tile9Angle = Convert.ToInt16(tempHolder);
+                            tempHolder = dataReader["Tile9Angle"].ToString();
+                            obj.Tile9Angle = Convert.ToInt16(tempHolder);
+                        }
+                    }
                 }
+                   
             }
             return obj;
         }

@@ -34,6 +34,12 @@ namespace DatabaseManager
             
         }
 
+        public void Dispose()
+        {
+            
+            this.Dispose();
+        }
+
         public CaptchaSession GetCaptchaSession(int captchaId, string captchaKey)
         {
             CaptchaSession obj = new CaptchaSession();
@@ -41,37 +47,38 @@ namespace DatabaseManager
             string queryString = "SELECT * FROM captcha_session WHERE CaptchaId = @captchaId AND CaptchaKey = @captchaKey";
             if(database.OpenConnection())
             {
-                MySqlCommand cmd = new MySqlCommand(queryString, database.Connection);
-                cmd.Parameters.AddWithValue("@captchaId", captchaId);
-                cmd.Parameters.AddWithValue("@captchaKey", captchaKey);
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-                while(dataReader.Read())
+                using (MySqlCommand cmd = new MySqlCommand(queryString, database.Connection))
                 {
-                    string tempHolder = dataReader["CaptchaId"].ToString();
-                    obj.CaptchaId = Convert.ToInt32(tempHolder);
-                    
-                    obj.ImageName = dataReader["ImageName"].ToString();
-                    
-                    string isvalid = dataReader["IsValid"].ToString();
-
-                    if(isvalid.Equals("0"))
+                    cmd.Parameters.AddWithValue("@captchaId", captchaId);
+                    cmd.Parameters.AddWithValue("@captchaKey", captchaKey);
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
                     {
-                        obj.IsValid = false;
-                    }
-                    else
-                    {
-                        obj.IsValid = true;
-                    }
+                        while (dataReader.Read())
+                        {
+                            string tempHolder = dataReader["CaptchaId"].ToString();
+                            obj.CaptchaId = Convert.ToInt32(tempHolder);
 
-                    obj.CaptchaKey = captchaKey;
-                    
-                }
-                dataReader.Close();
+                            obj.ImageName = dataReader["ImageName"].ToString();
 
-                database.CloseConnection();
+                            string isvalid = dataReader["IsValid"].ToString();
 
-                
+                            if (isvalid.Equals("0"))
+                            {
+                                obj.IsValid = false;
+                            }
+                            else
+                            {
+                                obj.IsValid = true;
+                            }
+
+                            obj.CaptchaKey = captchaKey;
+
+                        }
+                        dataReader.Close();
+                    }     
+                }   
             }
+            database.CloseConnection();
 
             return obj;
         }
@@ -83,33 +90,33 @@ namespace DatabaseManager
             string queryString = "SELECT * FROM captcha_session WHERE CaptchaId = @captchaId";
             if (database.OpenConnection())
             {
-                MySqlCommand cmd = new MySqlCommand(queryString, database.Connection);
-                cmd.Parameters.AddWithValue("@captchaId", captchaId);
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-                while (dataReader.Read())
+                using (MySqlCommand cmd = new MySqlCommand(queryString, database.Connection))
                 {
-                    string tempHolder = dataReader["CaptchaId"].ToString();
-                    obj.CaptchaId = Convert.ToInt32(tempHolder);
-
-                    obj.ImageName = dataReader["ImageName"].ToString();
-
-                    string isvalid = dataReader["IsValid"].ToString();
-
-                    if (isvalid.Equals("0"))
+                    cmd.Parameters.AddWithValue("@captchaId", captchaId);
+                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
                     {
-                        obj.IsValid = false;
-                    }
-                    else
-                    {
-                        obj.IsValid = true;
-                    }
+                        while (dataReader.Read())
+                        {
+                            string tempHolder = dataReader["CaptchaId"].ToString();
+                            obj.CaptchaId = Convert.ToInt32(tempHolder);
 
+                            obj.ImageName = dataReader["ImageName"].ToString();
+
+                            string isvalid = dataReader["IsValid"].ToString();
+
+                            if (isvalid.Equals("0"))
+                            {
+                                obj.IsValid = false;
+                            }
+                            else
+                            {
+                                obj.IsValid = true;
+                            }
+                        }
+                    }    
                 }
-                dataReader.Close();
-
-                database.CloseConnection();
-
             }
+            database.CloseConnection();
 
             return obj;
         }
@@ -162,18 +169,19 @@ namespace DatabaseManager
             string queryString = "UPDATE captcha_session SET IsValid = @isValid where CaptchaId = @captchaId";
             if (database.OpenConnection())
             {
-                MySqlCommand cmd = new MySqlCommand(queryString, database.Connection);
-                cmd.Parameters.AddWithValue("@isValid", valid);
-                cmd.Parameters.AddWithValue("@captchaId", captchaId);
-                
-                int numOfRows = cmd.ExecuteNonQuery();
-                if (numOfRows >= 1)
+                using (MySqlCommand cmd = new MySqlCommand(queryString, database.Connection))
                 {
-                    result = true;
-                }
-                database.CloseConnection();
+                    cmd.Parameters.AddWithValue("@isValid", valid);
+                    cmd.Parameters.AddWithValue("@captchaId", captchaId);
 
+                    int numOfRows = cmd.ExecuteNonQuery();
+                    if (numOfRows >= 1)
+                    {
+                        result = true;
+                    }
+                }
             }
+            database.CloseConnection();
             return result;
 
         }
@@ -204,23 +212,23 @@ namespace DatabaseManager
             bool result = false;
             try
             {
-                
                 string queryString = "INSERT INTO captcha_session(ImageName) values (@imageName); SELECT LAST_INSERT_ID();";
                 if (database.OpenConnection())
                 {
-                    MySqlCommand cmd = new MySqlCommand(queryString, database.Connection);
-                    cmd.Parameters.AddWithValue("@imageName", ImageName);
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    var obj = cmd.ExecuteScalar();
-                    if (obj != null)
+                    using (MySqlCommand cmd = new MySqlCommand(queryString, database.Connection))
                     {
-                        captchaId = Convert.ToInt32(obj);
+                        cmd.Parameters.AddWithValue("@imageName", ImageName);
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        var obj = cmd.ExecuteScalar();
+                        if (obj != null)
+                        {
+                            captchaId = Convert.ToInt32(obj);
+                        }
+                        result = true;
                     }
-                    result = true;
-
-                    database.CloseConnection();
 
                 }
+                database.CloseConnection();
             }
             catch(Exception ex)
             {
