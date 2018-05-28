@@ -1,7 +1,7 @@
 var interactive_captcha = (function(){
-    //  var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
+     //var gWebServiceHost = "http://localhost:55155/CaptchaWCF.svc";
     // var gWebServiceHost = "http://122.11.177.14/IC/CaptchaWCF.svc";
-    var gWebServiceHost = "http://fmcc.aquametro.com.sg/ic/CaptchaWCF.svc";
+     var gWebServiceHost = "http://fmcc.aquametro.com.sg/ic/CaptchaWCF.svc";
     
     var gLocaleList = {
         "en":{
@@ -47,23 +47,43 @@ var interactive_captcha = (function(){
     } 
 
     function ShowLoadingIcon(){
+        LowerOpacityContainer();
         $("#icLoading").show();
     }
 
     function HideLoadingIcon(){
+        RestoreOpacityContainer();
         $("#icLoading").hide();
     }
 
-    var ShowErrorMesg= function(mesg){
+    function LowerOpacityContainer(){
         $(".ic-tile").css("opacity", 0.3);
+    }
+
+    function RestoreOpacityContainer(){
+        $(".ic-tile").css("opacity", 1);
+    }
+
+    var ShowErrorMesg= function(mesg){
+        LowerOpacityContainer();
         $("#icError").fadeIn(1000);
         $("#icErrorText").html(mesg);
     };
 
     var ShowSuccessMesg = function(){
-        $(".ic-tile").css("opacity", 0.3);
+        LowerOpacityContainer();
         $("#icSuccess").fadeIn(1000);
     };
+
+    function DisableConfirmBtn(){
+        $("#icConfirm").attr("disabled", true);
+        $("#icConfirm").css("opacity", 0.3);
+    }
+
+    function EnableConfirmBtn(){
+        $("#icConfirm").attr("disabled", false);
+        $("#icConfirm").css("opacity", 1);
+    }
 
     var Init = function(renderId, callback){
         gCallback = callback;
@@ -171,6 +191,11 @@ var interactive_captcha = (function(){
         ShowErrorMesg("Cannot connect to captcha server");
     }
 
+    function HideMesg(){
+        $("#icSuccess").hide();
+        $("#icError").hide();
+    }
+
     var CheckResultCustom = function(successCallBack, errorCallBack){
         let captchaImages = document.getElementsByClassName('captcha-image');
         let dataString = "";
@@ -200,19 +225,22 @@ var interactive_captcha = (function(){
     };
 
     function CheckResult_Success(data){
+        HideLoadingIcon();
         if(data === true){
             ShowSuccessMesg();
         }else{
             $("#icError").fadeIn(1000);
-            $(".ic-tile").css("opacity", 0.3);
+            LowerOpacityContainer();
         }
         if(typeof gCallback === "function"){
             gCallback(data);
-        }
+        }        
     }
     
     function CheckResult_Error(data){
         // ERROR IN GETTING RESULT
+        HideLoadingIcon();
+        
     }    
 
     function btnClick(){
@@ -224,6 +252,8 @@ var interactive_captcha = (function(){
         });
     
         $("#icConfirm").click(function () {
+            ShowLoadingIcon();
+            DisableConfirmBtn();
             CheckResultDefault();
         });
     
@@ -238,7 +268,9 @@ var interactive_captcha = (function(){
 
     var Reload = function(){
         $("#icTile").html("");
+        HideMesg();
         ShowLoadingIcon();
+        EnableConfirmBtn();
         let methodName = "GetCaptcha";
         ajaxGet(methodName, null, GetCaptcha_Success, GetCaptcha_Error);
     };
@@ -304,7 +336,7 @@ var interactive_captcha = (function(){
     return {
         Init : Init,
         InitWithoutButton : InitWithoutButton,
-        CheckResultCustom : CheckResultCustom,        
+        CheckResultCustom : CheckResultCustom,
         ShowErrorMesg : ShowErrorMesg,
         ShowSuccessMesg : ShowSuccessMesg,
         SetCallback : SetCallback,

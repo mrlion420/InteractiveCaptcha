@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
@@ -18,17 +19,19 @@ namespace Interactive_Captcha
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, InstanceContextMode = InstanceContextMode.PerCall)]
     public class CaptchaWCF : ICaptchaWCF
     {
         public string currentDirectory = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
         public Random rnd = new Random();
-
+        
         public void GetOptions()
         {
         }
 
         public List<ImageURL> GetCaptcha()
         {
+            ServicePointManager.DefaultConnectionLimit = int.MaxValue;
             List<ImageURL> lstImageURL = new List<ImageURL>();
 
             string imageFilePath = currentDirectory + @"\OutputImg\";
@@ -128,6 +131,9 @@ namespace Interactive_Captcha
                     return new List<ImageURL>();
                 }
             }
+            
+            excludedNumbers = null;
+            //GC.Collect();
             return lstImageURL;
         }
 
@@ -249,7 +255,7 @@ namespace Interactive_Captcha
         private HashSet<int> GetRandomExcludedNumbers()
         {
             HashSet<int> excludedNumbers = new HashSet<int>();
-
+            
             for (int i = 0; i < 3; i++)
             {
                 var range = Enumerable.Range(1, 9).Where(x => !excludedNumbers.Contains(x));
