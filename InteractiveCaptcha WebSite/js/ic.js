@@ -66,8 +66,8 @@ var interactive_captcha = (function(){
 
     var ShowErrorMesg= function(mesg){
         LowerOpacityContainer();
-        $("#icError").fadeIn(1000);
-        $("#icErrorText").html(mesg);
+        $("#icErrorTxt").html(mesg);
+        $("#icError").fadeIn(1000);        
     };
 
     var ShowSuccessMesg = function(){
