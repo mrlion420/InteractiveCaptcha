@@ -55,6 +55,13 @@ function DemoWithoutButton(){
     interactive_captcha.InitWithoutButton("test-container");
 }
 
+function btnClickhandler(){
+    $("#btnSubmit").click(function(){
+        interactive_captcha.CheckResultCustom(CheckResult_Success, CheckResult_Error);
+    });
+}
+
+
 function CheckResult_Success(data){
     if(data === true){
         interactive_captcha.ShowSuccessMesg();
@@ -67,12 +74,6 @@ function CheckResult_Error(data){
     interactive_captcha.ShowErrorMesg("Error in loading captcha");
 }
 
-function btnClickhandler(){
-    $("#btnSubmit").click(function(){
-        interactive_captcha.CheckResultCustom(CheckResult_Success, CheckResult_Error);
-    });
-}
-
 // -------------------- DEMO WITH BUTTON  ----------------------------
 function DemoWithButton(){
     interactive_captcha.Init("test-container", callbackToClient);
@@ -81,5 +82,4 @@ function DemoWithButton(){
 
 function callbackToClient(data){
     console.log("Check Result Callback");
-    // alert("Callback to client");
 }
