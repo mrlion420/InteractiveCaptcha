@@ -210,6 +210,7 @@ namespace Interactive_Captcha
 
                 // Update the captcha to invalid regardless of result
                 captchaSession.UpdateIsValid(captchaId, false);
+                captchaSession.DeleteCaptchaMoreThanOneDay();
                 //DeleteCaptchaImage(captchaId);
             }
 

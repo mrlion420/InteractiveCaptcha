@@ -339,11 +339,11 @@ var interactive_captcha = (function(){
         CheckResultCustom : CheckResultCustom,
         ShowErrorMesg : ShowErrorMesg,
         ShowSuccessMesg : ShowSuccessMesg,
-        SetCallback : SetCallback,
         Reload : Reload,
         Config : Config,
         SetCurrentLocale : SetCurrentLocale,
-        AddNewLocale : AddNewLocale
+        AddNewLocale : AddNewLocale,
+        gCaptchaId : gCaptchaId
     };
     
 }());

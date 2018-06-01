@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
     DemoWithButton();
     // AddNewLocale();
     // DemoWithButton();
@@ -29,18 +29,11 @@ function ChangeConfig(){
 function AddNewLocale(){
     let newLocale = { 
         "zh" : {
-            chartTitle: "Chart Title Chinese",
-            confirmBtnTxt : "Chinese",
-            reloadBtnTxt: "Chinese",
-            successTxt: "Chinese",
-            errorTxt: "Chinese"
-        },
-        "fr": {
-            chartTitle : "French",
-            confirmBtnTxt : "French",
-            reloadBtnTxt: "French",
-            successTxt: "French",
-            errorTxt: "French"
+            chartTitle: "请点击旋转图片",
+            confirmBtnTxt: "确定",
+            reloadBtnTxt: "刷新",
+            successTxt: "验证成功！",
+            errorTxt: "验证错误，请重试！"
         }
     };
 

@@ -186,6 +186,18 @@ namespace DatabaseManager
 
         }
 
+        public void DeleteCaptchaMoreThanOneDay()
+        {
+            string queryString = "delete from captcha_session where currentdatetime < Date_sub(NOW(), interval 1 day)";
+            if (database.OpenConnection())
+            {
+                using(MySqlCommand cmd = new MySqlCommand(queryString, database.Connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            database.CloseConnection();
+        }
 
         public bool InsertWithKey(CaptchaSession obj)
         {
