@@ -23,9 +23,7 @@ namespace DatabaseManager
             //CREATE TABLE CAPTCHA_SESSION(
             //CaptchaId int AUTO_INCREMENT PRIMARY KEY,
             //ImageName VARCHAR(255) NOT NULL,
-            //IsValid BIT DEFAULT 1,
-            //CaptchaKey VARCHAR(255) NOT NULL,
-            //FOREIGN KEY(CaptchaKey) REFERENCES captcha_keys(captchakey) on delete cascade
+            //IsValid BIT DEFAULT 1
             //)
         }
 
@@ -40,48 +38,6 @@ namespace DatabaseManager
             this.Dispose();
         }
 
-        public CaptchaSession GetCaptchaSession(int captchaId, string captchaKey)
-        {
-            CaptchaSession obj = new CaptchaSession();
-            
-            string queryString = "SELECT * FROM captcha_session WHERE CaptchaId = @captchaId AND CaptchaKey = @captchaKey";
-            if(database.OpenConnection())
-            {
-                using (MySqlCommand cmd = new MySqlCommand(queryString, database.Connection))
-                {
-                    cmd.Parameters.AddWithValue("@captchaId", captchaId);
-                    cmd.Parameters.AddWithValue("@captchaKey", captchaKey);
-                    using (MySqlDataReader dataReader = cmd.ExecuteReader())
-                    {
-                        while (dataReader.Read())
-                        {
-                            string tempHolder = dataReader["CaptchaId"].ToString();
-                            obj.CaptchaId = Convert.ToInt32(tempHolder);
-
-                            obj.ImageName = dataReader["ImageName"].ToString();
-
-                            string isvalid = dataReader["IsValid"].ToString();
-
-                            if (isvalid.Equals("0"))
-                            {
-                                obj.IsValid = false;
-                            }
-                            else
-                            {
-                                obj.IsValid = true;
-                            }
-
-                            obj.CaptchaKey = captchaKey;
-
-                        }
-                        dataReader.Close();
-                    }     
-                }   
-            }
-            database.CloseConnection();
-
-            return obj;
-        }
 
         public CaptchaSession GetCaptchaSession(int captchaId)
         {
@@ -119,38 +75,6 @@ namespace DatabaseManager
             database.CloseConnection();
 
             return obj;
-        }
-
-        public bool UpdateIsValid(int captchaId, string captchaKey, bool isValid)
-        {
-            int valid;
-            bool result = false;
-            if (isValid)
-            {
-                valid = 1;
-            }
-            else
-            {
-                valid = 0;
-            }
-            
-            string queryString = "UPDATE captcha_session SET IsValid = @isValid where CaptchaId = @captchaId and CaptchaKey = @captchaKey";
-            if(database.OpenConnection())
-            {
-                MySqlCommand cmd = new MySqlCommand(queryString, database.Connection);
-                cmd.Parameters.AddWithValue("@isValid", valid);
-                cmd.Parameters.AddWithValue("@captchaId", captchaId);
-                cmd.Parameters.AddWithValue("@captchaKey", captchaKey);
-                int numOfRows = cmd.ExecuteNonQuery();
-                if(numOfRows >= 1)
-                {
-                    result = true;
-                }
-                database.CloseConnection();
-                
-            }
-            return result;
-         
         }
 
         public bool UpdateIsValid(int captchaId, bool isValid)
@@ -199,25 +123,6 @@ namespace DatabaseManager
             database.CloseConnection();
         }
 
-        public bool InsertWithKey(CaptchaSession obj)
-        {
-            bool result = false;
-            string queryString = "INSERT INTO captcha_session(ImageName,CaptchaKey) values (@imageName, @captchaKey)";
-            if(database.OpenConnection())
-            {
-                MySqlCommand cmd = new MySqlCommand(queryString, database.Connection);
-                cmd.Parameters.AddWithValue("@imageName", obj.ImageName);
-                cmd.Parameters.AddWithValue("@captchaKey", obj.CaptchaKey);
-                int numOfRows = cmd.ExecuteNonQuery();
-                if(numOfRows >= 1)
-                {
-                    result = true;
-                }
-                database.CloseConnection();
-                
-            }
-            return result;
-        }
 
         public bool Insert(ref int captchaId)
         {

@@ -19,7 +19,6 @@ var interactive_captcha = (function(){
     var gCaptchaId = 0;
     var gRenderId = "";
     var gCallback = null;
-    var gInitWithoutBtn = false;
 
     function ajaxGet(methodName, data, successCallBack, errorCallBack){
         let url = gWebServiceHost + "/" + methodName;
@@ -161,6 +160,7 @@ var interactive_captcha = (function(){
     };
 
     function GetCaptcha_Success(data){
+        EnableConfirmBtn();
         let htmlString = "";
         let count = 0;
         let currentCount = 1;
@@ -189,6 +189,7 @@ var interactive_captcha = (function(){
         // ERROR IN GETTING CAPTCHA
         HideLoadingIcon();
         ShowErrorMesg("Cannot connect to captcha server");
+        DisableConfirmBtn();
     }
 
     function HideMesg(){
@@ -221,7 +222,7 @@ var interactive_captcha = (function(){
         }
         let data = { captchaId : gCaptchaId , dataString : dataString };
         let methodName = "CheckResult";
-        ajaxPost(methodName, data, CheckResult_Success, CheckResult_Success);
+        ajaxPost(methodName, data, CheckResult_Success, CheckResult_Error);
     };
 
     function CheckResult_Success(data){
@@ -240,7 +241,8 @@ var interactive_captcha = (function(){
     function CheckResult_Error(data){
         // ERROR IN GETTING RESULT
         HideLoadingIcon();
-        
+        ShowErrorMesg("Error in verifying captcha");
+        DisableConfirmBtn();
     }    
 
     function btnClick(){
@@ -262,15 +264,10 @@ var interactive_captcha = (function(){
         });
     }
 
-    var SetCallback = function(callback){
-        gCallback = callback;
-    };
-
     var Reload = function(){
         $("#icTile").html("");
         HideMesg();
         ShowLoadingIcon();
-        EnableConfirmBtn();
         let methodName = "GetCaptcha";
         ajaxGet(methodName, null, GetCaptcha_Success, GetCaptcha_Error);
     };

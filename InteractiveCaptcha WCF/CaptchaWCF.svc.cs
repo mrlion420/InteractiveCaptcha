@@ -252,7 +252,7 @@ namespace Interactive_Captcha
         {
             HashSet<int> excludedNumbers = new HashSet<int>();
             
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var range = Enumerable.Range(1, 9).Where(x => !excludedNumbers.Contains(x));
                 int index = rnd.Next(0, 9 - excludedNumbers.Count);
@@ -299,7 +299,7 @@ namespace Interactive_Captcha
         {
             // Apply image filter
             int randomNumber = rnd.Next(1, 4);
-            float randomPercent = (float)RandomNumberBetween(0.05, 0.20);
+            float randomPercent = (float)RandomNumberBetween(0.00, 0.10);
             Bitmap resultBitmap = null;
             switch (randomNumber)
             {

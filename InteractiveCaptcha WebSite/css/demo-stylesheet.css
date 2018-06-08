@@ -1,0 +1,40 @@
+.demo-button{
+    width: 150px;
+    background-color: #1d1d1d;
+    color : white;
+    border: 0px;
+    border-radius: 5px;
+    margin: 10px 10px 0px 0px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.demo-button:hover{
+    background-color: #E7746F;
+    color : #1d1d1d;
+}
+
+.user-confirm{
+    width: 150px;
+    background-color: #4286f4;
+    color : white;
+    border: 0px;
+    border-radius: 5px;
+    margin: 10px 10px 0px 0px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.user-confirm:hover{
+    background-color : #0c51f5;
+}
+
+.label-result{
+    display: inline-block;
+    margin: 10px 0px 0px 0px;
+    font-size: 26px;
+}
+
+.color-red{
+    color: red;
+}
